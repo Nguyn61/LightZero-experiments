@@ -39,10 +39,13 @@ Reward Space:
 
 from __future__ import annotations
 
+import copy
 import gc
+import math
 
-from dataclasses import dataclass, asdict
-from typing import Optional
+from dataclasses import dataclass, asdict, field
+from enum import Enum
+from typing import Dict, Optional, Tuple
 import numpy as np
 from ding.envs import BaseEnvTimestep
 from ding.utils import ENV_REGISTRY
@@ -66,8 +69,9 @@ from zoo.pooltool.sum_to_three.envs.utils import (
     image_observation_array,
     get_image_obs_space,
     get_coordinate_obs_space,
-    get_reward_function,
     get_reward_space,
+    get_shot_outcome,
+    reward_from_outcome,
 )
 
 
@@ -84,32 +88,103 @@ def get_action_space(V0: Bounds, angle: Bounds) -> spaces.Box:
     )
 
 
-def _set_initial_positions(system: pt.System, random_pos: bool) -> None:
+class StartDistribution(Enum):
+    CANONICAL = "canonical"
+    LOCAL = "local"
+    BROAD = "broad"
+    CURRICULUM = "curriculum"
+
+
+def _canonical_positions(system: pt.System) -> Tuple[np.ndarray, np.ndarray]:
     R = system.balls["cue"].params.R
+    cue_pos = np.array([system.table.w / 2, system.table.l / 4, R], dtype=np.float64)
+    object_pos = np.array([system.table.w / 2, system.table.l * 3 / 4, R], dtype=np.float64)
+    return cue_pos, object_pos
 
-    if random_pos:
-        cue_pos = (
-            (system.table.w - 2 * R) * np.random.rand() + R,
-            (system.table.l - 2 * R) * np.random.rand() + R,
-            R,
-        )
-        object_pos = (
-            (system.table.w - 2 * R) * np.random.rand() + R,
-            (system.table.l - 2 * R) * np.random.rand() + R,
-            R,
-        )
-    else:
-        cue_pos = (
-            system.table.w / 2,
-            system.table.l / 4,
-            R,
-        )
-        object_pos = (
-            system.table.w / 2,
-            system.table.l * 3 / 4,
-            R,
-        )
 
+def _valid_positions(
+    cue_pos: np.ndarray,
+    object_pos: np.ndarray,
+    system: pt.System,
+    separation_margin: float,
+) -> bool:
+    R = system.balls["cue"].params.R
+    within_table = (
+        R <= cue_pos[0] <= system.table.w - R
+        and R <= cue_pos[1] <= system.table.l - R
+        and R <= object_pos[0] <= system.table.w - R
+        and R <= object_pos[1] <= system.table.l - R
+    )
+    separation = np.linalg.norm(cue_pos[:2] - object_pos[:2])
+    return within_table and separation >= 2 * R + separation_margin
+
+
+def sample_initial_positions(
+    system: pt.System,
+    distribution: StartDistribution,
+    rng: np.random.Generator,
+    local_perturbation_fraction: float = 0.08,
+    separation_margin: float = 0.005,
+    max_attempts: int = 100,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Sample valid ball positions for one of the research start distributions."""
+    canonical_cue, canonical_object = _canonical_positions(system)
+    if distribution == StartDistribution.CANONICAL:
+        return canonical_cue, canonical_object
+    if distribution == StartDistribution.CURRICULUM:
+        raise ValueError("CURRICULUM must be resolved to canonical, local, or broad before sampling")
+
+    R = system.balls["cue"].params.R
+    usable_width = system.table.w - 2 * R
+    usable_length = system.table.l - 2 * R
+
+    for _ in range(max_attempts):
+        if distribution == StartDistribution.LOCAL:
+            scale = np.array(
+                [local_perturbation_fraction * usable_width, local_perturbation_fraction * usable_length]
+            )
+            cue_xy = canonical_cue[:2] + rng.uniform(-scale, scale)
+            object_xy = canonical_object[:2] + rng.uniform(-scale, scale)
+        elif distribution == StartDistribution.BROAD:
+            cue_xy = rng.uniform([R, R], [system.table.w - R, system.table.l - R])
+            object_xy = rng.uniform([R, R], [system.table.w - R, system.table.l - R])
+        else:
+            raise ValueError(f"Unhandled start distribution: {distribution}")
+
+        cue_pos = np.array([cue_xy[0], cue_xy[1], R], dtype=np.float64)
+        object_pos = np.array([object_xy[0], object_xy[1], R], dtype=np.float64)
+        if _valid_positions(cue_pos, object_pos, system, separation_margin):
+            return cue_pos, object_pos
+
+    raise RuntimeError(
+        f"Could not sample valid {distribution.value} positions after {max_attempts} attempts"
+    )
+
+
+def _set_initial_positions(
+    system: pt.System,
+    random_pos: bool = False,
+    *,
+    distribution: Optional[StartDistribution] = None,
+    rng: Optional[np.random.Generator] = None,
+    local_perturbation_fraction: float = 0.08,
+    separation_margin: float = 0.005,
+    max_attempts: int = 100,
+) -> None:
+    if distribution is None:
+        distribution = StartDistribution.BROAD if random_pos else StartDistribution.CANONICAL
+    if rng is None:
+        legacy_seed = int(np.random.randint(0, np.iinfo(np.uint32).max))
+        rng = np.random.default_rng(legacy_seed)
+
+    cue_pos, object_pos = sample_initial_positions(
+        system,
+        distribution,
+        rng,
+        local_perturbation_fraction=local_perturbation_fraction,
+        separation_margin=separation_margin,
+        max_attempts=max_attempts,
+    )
     system.balls["cue"].state.rvw[0] = cue_pos
     system.balls["object"].state.rvw[0] = object_pos
 
@@ -234,6 +309,12 @@ class SumToThreeSimulator(PoolToolSimulator):
 class EpisodicTrackedStats:
     eval_episode_length: int = 0
     eval_episode_return: float = 0.0
+    binary_episode_return: float = 0.0
+    sparse_success_count: int = 0
+    contact_count: int = 0
+    cushion_count_histogram: Dict[str, int] = field(default_factory=dict)
+    start_distribution: str = StartDistribution.CANONICAL.value
+    reward_algorithm: str = "binary"
 
 
 @ENV_REGISTRY.register("pooltool_sumtothree")
@@ -248,17 +329,61 @@ class SumToThreeEnv(PoolToolEnv):
         action_angle_low=-70,
         action_angle_high=70,
         raw_observation=False,
+        start_distribution="canonical",
+        curriculum_enabled=False,
+        curriculum_total_env_steps=40000,
+        curriculum_total_episodes=None,
+        curriculum_canonical_fraction=0.25,
+        curriculum_local_fraction=0.40,
+        local_perturbation_fraction=0.08,
+        start_separation_margin=0.005,
+        start_sampling_max_attempts=100,
+        emit_step_diagnostics=False,
+        env_role="default",
     )
 
     def __repr__(self) -> str:
         return "SumToThreeEnv"
 
+    @staticmethod
+    def create_collector_env_cfg(cfg: dict) -> list:
+        cfg = copy.deepcopy(cfg)
+        collector_env_num = cfg.pop("collector_env_num")
+        cfg["env_role"] = "collector"
+        if (
+            cfg.get("curriculum_total_episodes") is None
+            and (
+                cfg.get("curriculum_enabled")
+                or cfg.get("start_distribution") == StartDistribution.CURRICULUM.value
+            )
+        ):
+            total_env_steps = int(cfg.get("curriculum_total_env_steps", 40000))
+            episode_length = int(cfg.get("episode_length", SumToThreeEnv.config["episode_length"]))
+            cfg["curriculum_total_episodes"] = max(
+                1, math.ceil(total_env_steps / (collector_env_num * episode_length))
+            )
+        return [copy.deepcopy(cfg) for _ in range(collector_env_num)]
+
+    @staticmethod
+    def create_evaluator_env_cfg(cfg: dict) -> list:
+        cfg = copy.deepcopy(cfg)
+        evaluator_env_num = cfg.pop("evaluator_env_num")
+        start_distribution = (
+            cfg.get("start_distribution", StartDistribution.CANONICAL.value)
+            if cfg.get("external_evaluation", False)
+            else StartDistribution.CANONICAL.value
+        )
+        cfg.update(
+            env_role="evaluator",
+            reward_algorithm="binary",
+            start_distribution=start_distribution,
+            curriculum_enabled=False,
+        )
+        return [copy.deepcopy(cfg) for _ in range(evaluator_env_num)]
+
     def __init__(self, cfg: EasyDict) -> None:
         self.cfg = cfg
-        self.raw_observation = cfg.raw_observation
-
-        # Get the reward function
-        self.calc_reward = get_reward_function(self.cfg.reward_algorithm)
+        self.raw_observation = cfg.get("raw_observation", False)
 
         # Structure the action bounds
         self.action_bounds = {
@@ -292,8 +417,51 @@ class SumToThreeEnv(PoolToolEnv):
                 self.render_config = RenderConfig.default()
 
         self._init_flag = False
+        self._rng = np.random.default_rng()
+        self._reset_count = 0
+        self._current_start_distribution = StartDistribution.CANONICAL
         self._tracked_stats = EpisodicTrackedStats()
         self._env: SumToThreeSimulator
+
+    def seed(self, seed: int, dynamic_seed: bool = True) -> None:
+        super().seed(seed, dynamic_seed)
+        self._rng = np.random.default_rng(seed)
+
+    def _resolve_start_distribution(self) -> StartDistribution:
+        configured = StartDistribution(self.cfg.get("start_distribution", "canonical"))
+        if not self.cfg.get("curriculum_enabled", False) and configured != StartDistribution.CURRICULUM:
+            return configured
+
+        total_episodes = self.cfg.get("curriculum_total_episodes")
+        if total_episodes is None:
+            total_episodes = max(
+                1,
+                math.ceil(
+                    int(self.cfg.get("curriculum_total_env_steps", 40000))
+                    / int(self.cfg.get("episode_length", self.config["episode_length"]))
+                ),
+            )
+        progress = min(self._reset_count / max(int(total_episodes), 1), 1.0)
+        canonical_fraction = float(self.cfg.get("curriculum_canonical_fraction", 0.25))
+        local_fraction = float(self.cfg.get("curriculum_local_fraction", 0.40))
+        if progress < canonical_fraction:
+            return StartDistribution.CANONICAL
+        if progress < canonical_fraction + local_fraction:
+            return StartDistribution.LOCAL
+        return StartDistribution.BROAD
+
+    def _apply_start_distribution(self) -> None:
+        self._current_start_distribution = self._resolve_start_distribution()
+        _set_initial_positions(
+            self._env.state.system,
+            distribution=self._current_start_distribution,
+            rng=self._rng,
+            local_perturbation_fraction=float(self.cfg.get("local_perturbation_fraction", 0.08)),
+            separation_margin=float(self.cfg.get("start_separation_margin", 0.005)),
+            max_attempts=int(self.cfg.get("start_sampling_max_attempts", 100)),
+        )
+        _set_initial_cue_state(self._env.state.system)
+        self._reset_count += 1
 
     def close(self) -> None:
         if self._env.renderer is not None:
@@ -362,7 +530,11 @@ class SumToThreeEnv(PoolToolEnv):
             self._env.reset()
 
         self.manage_seeds()
-        self._tracked_stats = EpisodicTrackedStats()
+        self._apply_start_distribution()
+        self._tracked_stats = EpisodicTrackedStats(
+            start_distribution=self._current_start_distribution.value,
+            reward_algorithm=self.cfg.reward_algorithm,
+        )
 
         self._observation_space = self._env.spaces.observation
         self._action_space = self._env.spaces.action
@@ -377,13 +549,36 @@ class SumToThreeEnv(PoolToolEnv):
         self._env.set_action(self._env.scale_action(action))
         self._env.simulate()
 
-        rew = self.calc_reward(self._env.state)
+        outcome = get_shot_outcome(self._env.state)
+        rew = reward_from_outcome(self.cfg.reward_algorithm, outcome)
+        binary_rew = float(outcome.sparse_success)
 
         self._tracked_stats.eval_episode_length += 1
         self._tracked_stats.eval_episode_return += rew
+        self._tracked_stats.binary_episode_return += binary_rew
+        self._tracked_stats.sparse_success_count += int(outcome.sparse_success)
+        self._tracked_stats.contact_count += int(outcome.contacted_object)
+        cushion_key = str(outcome.linear_cushion_count)
+        self._tracked_stats.cushion_count_histogram[cushion_key] = (
+            self._tracked_stats.cushion_count_histogram.get(cushion_key, 0) + 1
+        )
 
         done = self._tracked_stats.eval_episode_length == self.cfg.episode_length
-        info = asdict(self._tracked_stats) if done else {}
+        info = {}
+        if self.cfg.get("emit_step_diagnostics", False) or done:
+            info.update(
+                shot_outcome=asdict(outcome),
+                binary_reward=binary_rew,
+                start_distribution=self._current_start_distribution.value,
+                reward_algorithm=self.cfg.reward_algorithm,
+            )
+        if done:
+            info.update(asdict(self._tracked_stats))
+            info["episode_info"] = {
+                "binary_episode_return": self._tracked_stats.binary_episode_return,
+                "sparse_success_count": self._tracked_stats.sparse_success_count,
+                "contact_count": self._tracked_stats.contact_count,
+            }
 
         if self.raw_observation:
             return BaseEnvTimestep(

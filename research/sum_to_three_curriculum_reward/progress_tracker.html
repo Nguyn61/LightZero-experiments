@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Sum-to-Three · Sổ tiến độ thí nghiệm</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5d687a;
+      --paper: #f4f7fb;
+      --surface: #ffffff;
+      --line: #d8e0ec;
+      --navy: #16325c;
+      --blue: #1d4ed8;
+      --orange: #c2410c;
+      --magenta: #a21caf;
+      --green: #087f5b;
+      --danger: #b42318;
+      --focus: #f59e0b;
+      --shadow: 0 10px 30px rgba(22, 50, 92, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .shell { max-width: 1240px; margin: 0 auto; padding: 24px; }
+    .masthead { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; border-bottom: 5px solid var(--navy); padding: 20px 0 22px; }
+    .eyebrow, .micro { color: var(--muted); font: 700 .72rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    h1 { margin: 7px 0 5px; color: var(--navy); font-size: clamp(2rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.055em; }
+    .subtitle { margin: 0; max-width: 62ch; color: var(--muted); }
+    .sync { text-align: right; color: var(--muted); font-size: .85rem; }
+    .sync strong { color: var(--green); }
+    .notice { margin: 20px 0; padding: 13px 16px; border-left: 4px solid var(--orange); background: #fff9ed; color: #63340d; }
+    .overview { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(240px, .8fr); gap: 20px; margin: 20px 0; }
+    .card { background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .scoreboard { padding: 22px; }
+    .scoreboard h2, .section-heading h2 { margin: 0; color: var(--navy); font-size: 1.25rem; letter-spacing: -.02em; }
+    .meter { margin: 20px 0 10px; height: 16px; overflow: hidden; background: #e8edf5; border-radius: 2px; }
+    .meter > span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--blue), var(--magenta)); transition: width .25s ease; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+    .stat { padding: 12px; border-left: 3px solid var(--blue); background: #f8faff; }
+    .stat strong { display: block; font-size: 1.7rem; line-height: 1; color: var(--navy); }
+    .stat span { display: block; margin-top: 5px; font-size: .78rem; color: var(--muted); }
+    .quick-actions { padding: 22px; display: grid; align-content: center; gap: 10px; }
+    button, .file-label { min-height: 42px; padding: 9px 14px; border: 1px solid var(--navy); border-radius: 2px; background: var(--navy); color: #fff; font-weight: 700; text-align: center; }
+    button:hover, .file-label:hover { background: #24477d; }
+    button.secondary, .file-label.secondary { color: var(--navy); background: #fff; }
+    button.secondary:hover, .file-label.secondary:hover { background: #eef4ff; }
+    button.danger { color: var(--danger); border-color: var(--danger); background: #fff; }
+    button.danger:hover { color: #fff; background: var(--danger); }
+    .file-label input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    main { display: grid; gap: 30px; }
+    .section-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+    .section-heading p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+    .phase { position: relative; border: 1px solid var(--line); background: var(--surface); }
+    .phase::before { content: attr(data-phase); display: block; padding: 7px 13px; background: var(--navy); color: #fff; font: 700 .74rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; }
+    .phase:nth-child(2)::before { background: var(--blue); }
+    .phase:nth-child(3)::before { background: var(--magenta); }
+    .phase h3 { margin: 16px 16px 3px; font-size: 1.12rem; }
+    .phase > p { min-height: 44px; margin: 0 16px 14px; color: var(--muted); font-size: .87rem; }
+    .checklist { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .checklist li + li { border-top: 1px solid var(--line); }
+    .checklist label { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; cursor: pointer; }
+    .checklist input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--green); flex: none; }
+    .checklist .task-name { display: block; font-weight: 700; font-size: .92rem; }
+    .checklist small { display: block; color: var(--muted); }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 14px 0 0; color: var(--muted); font-size: .85rem; }
+    .tag { display: inline-block; padding: 2px 6px; border-radius: 99px; background: #e7efff; color: var(--blue); font: 700 .7rem/1.3 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .tag.t1 { color: #8a300b; background: #fff0e9; } .tag.t2 { color: #72127a; background: #faeafd; }
+    .record-panel { padding: 20px; }
+    form { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .field { grid-column: span 3; } .field.wide { grid-column: span 6; } .field.full { grid-column: 1 / -1; }
+    label { font-weight: 700; font-size: .88rem; }
+    label .required { color: var(--danger); }
+    input, select, textarea { display: block; width: 100%; margin-top: 5px; padding: 9px 10px; color: var(--ink); border: 1px solid #aeb9ca; border-radius: 2px; background: #fff; }
+    textarea { min-height: 76px; resize: vertical; }
+    .helper { display: block; margin-top: 4px; color: var(--muted); font-size: .76rem; font-weight: 400; }
+    .form-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    #form-message { color: var(--green); font-weight: 700; font-size: .9rem; }
+    .table-wrap { overflow-x: auto; margin-top: 18px; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; min-width: 880px; font-size: .86rem; }
+    th { background: #eaf0fa; color: var(--navy); text-align: left; font-size: .74rem; letter-spacing: .05em; text-transform: uppercase; }
+    th, td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: none; } tr:hover td { background: #f7faff; }
+    code { padding: 2px 4px; background: #eef2f7; font: .78rem ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
+    .status { display: inline-flex; gap: 4px; align-items: center; font-weight: 700; } .status::before { content: "●"; font-size: .78em; }
+    .status.planned { color: var(--muted); }.status.running { color: var(--blue); }.status.done { color: var(--green); }.status.blocked { color: var(--danger); }
+    .row-actions { display: flex; gap: 6px; }.row-actions button { min-height: 31px; padding: 4px 8px; font-size: .75rem; }
+    details { margin-top: 18px; border: 1px solid var(--line); background: #fbfcff; } summary { padding: 12px 14px; cursor: pointer; font-weight: 700; } .details-inner { padding: 0 14px 14px; color: var(--muted); font-size: .88rem; }
+    .manifest-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; margin-top: 10px; } .manifest-grid code { display: block; white-space: normal; }
+    .toast { position: fixed; z-index: 2; right: 18px; bottom: 18px; max-width: min(420px, calc(100vw - 36px)); padding: 12px 15px; background: var(--navy); color: white; box-shadow: var(--shadow); transform: translateY(140%); transition: transform .2s ease; } .toast.show { transform: translateY(0); }
+    .footer { margin: 32px 0 8px; color: var(--muted); font-size: .8rem; }
+    @media (max-width: 850px) { .masthead, .overview { grid-template-columns: 1fr; }.sync { text-align: left; }.phases { grid-template-columns: 1fr; }.field, .field.wide { grid-column: span 6; } }
+    @media (max-width: 520px) { .shell { padding: 16px; }.field, .field.wide { grid-column: 1 / -1; }.stats { grid-template-columns: 1fr; }.masthead { padding-top: 8px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <div><div class="eyebrow">Research protocol / local-first</div><h1>Sum-to-Three<br>Curriculum Reward</h1><p class="subtitle">Sổ kiểm soát tiến độ cho một chuỗi thí nghiệm ngắn: xác nhận baseline, huấn luyện curriculum và kiểm tra phần thưởng có nói thật không.</p></div>
+      <div class="sync" aria-live="polite"><strong id="sync-state">Đã lưu cục bộ</strong><br><span id="updated-at">Chưa có thay đổi</span></div>
+    </header>
+    <p class="notice"><strong>Nguyên tắc:</strong> chỉ đánh dấu khi có bằng chứng. Mỗi run trong bảng dùng đúng khóa manifest để có thể xuất sang notebook phân tích.</p>
+    <section class="overview" aria-labelledby="overview-title">
+      <div class="card scoreboard"><h2 id="overview-title">Độ phủ protocol</h2><div class="meter" aria-label="Tiến độ checklist"><span id="progress-bar"></span></div><div id="progress-text" class="micro">0 / 0 nhiệm vụ hoàn thành</div><div class="stats"><div class="stat"><strong id="run-count">0</strong><span>run records</span></div><div class="stat"><strong id="done-count">0</strong><span>runs hoàn tất</span></div><div class="stat"><strong id="seed-count">0</strong><span>seed riêng biệt</span></div></div></div>
+      <aside class="card quick-actions" aria-label="Tác vụ dữ liệu"><button type="button" id="copy-summary">Sao chép tóm tắt Markdown</button><button type="button" class="secondary" id="export-json">Xuất JSON</button><label class="file-label secondary">Nhập JSON<input id="import-json" type="file" accept="application/json,.json"></label><button type="button" class="danger" id="reset-all">Xóa toàn bộ dữ liệu</button></aside>
+    </section>
+    <main>
+      <section aria-labelledby="protocol-title"><div class="section-heading"><div><div class="eyebrow">01 / protocol</div><h2 id="protocol-title">Checklist từ code đến paper</h2></div><p>Chỉ tick khi có command hoặc artifact làm bằng chứng.</p></div>
+        <div class="phases" id="phases">
+          <article class="phase" data-phase="P0"><h3>Baseline</h3><p>Khóa task, config và evidence trước intervention.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p0-tests"><span><span class="task-name"><span class="tag">P0</span> Tests legacy pass</span><small>Binary reward, canonical reset và action mapping không đổi.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p0-baseline"><span><span class="task-name"><span class="tag">P0</span> Archive baseline</span><small>Commit, manifest, TensorBoard và checkpoint checksum.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P1"><h3>Diagnostics</h3><p>Đo độ thưa và độ khó thay vì đoán.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p1-random"><span><span class="task-name"><span class="tag">P1</span> Random policy</span><small>Canonical/local/broad contact và exact-three rates.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p1-events"><span><span class="task-name"><span class="tag">P1</span> Inspect events</span><small>Cushion histogram và simulator anomalies.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P2"><h3>Implementation</h3><p>Reward, sampler và evaluator isolation có test.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p2-reward"><span><span class="task-name"><span class="tag t1">P2</span> Reward tests</span><small>0/1/2/3/&gt;3 cushion lookup và bounds.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p2-curriculum"><span><span class="task-name"><span class="tag t1">P2</span> Curriculum tests</span><small>Valid geometry, seed determinism, stages, binary evaluator.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P3"><h3>Smoke</h3><p>Xác nhận pipeline trước khi thuê GPU lâu.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p3-a"><span><span class="task-name"><span class="tag t1">P3</span> A 2k smoke</span><small>Baseline train/checkpoint/evaluation load.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p3-d"><span><span class="task-name"><span class="tag t1">P3</span> D 2k smoke</span><small>Curriculum stages và binary evaluator đúng.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P4"><h3>Pilot</h3><p>Sàng lọc lỗi và khóa main budget.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p4-arms"><span><span class="task-name"><span class="tag t1">P4</span> A–E seed 0</span><small>15k–20k steps, cùng protocol.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p4-budget"><span><span class="task-name"><span class="tag t1">P4</span> Freeze budget</span><small>Ghi throughput, chi phí và stopping rule.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P5"><h3>Main runs</h3><p>Factorial A–D với seed độc lập.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p5-main"><span><span class="task-name"><span class="tag t2">P5</span> A–D × 3 seeds</span><small>Không kéo dài riêng arm ưa thích.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p5-confirm"><span><span class="task-name"><span class="tag t2">P5</span> A/D confirmation</span><small>Seeds 3/4 nếu effect đủ lớn.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P6"><h3>Analysis</h3><p>Binary T0/T1/T2, AUC, CI và mismatch.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p6-eval"><span><span class="task-name"><span class="tag t2">P6</span> Held-out eval</span><small>Canonical/local/broad bằng binary reward.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p6-stats"><span><span class="task-name"><span class="tag t2">P6</span> Statistics</span><small>Per-seed, AUC, bootstrap CI, effect size.</small></span></label></li>
+          </ul></article>
+          <article class="phase" data-phase="P7"><h3>Writing</h3><p>Mọi claim liên kết về artifact.</p><ul class="checklist">
+            <li><label><input type="checkbox" data-task="p7-journal"><span><span class="task-name"><span class="tag t2">P7</span> Journal complete</span><small>Failures, exclusions, limitations và next action.</small></span></label></li>
+            <li><label><input type="checkbox" data-task="p7-paper"><span><span class="task-name"><span class="tag t2">P7</span> Report draft</span><small>Methods, Results, Discussion, reproducibility appendix.</small></span></label></li>
+          </ul></article>
+        </div><p class="legend"><span><span class="tag">P0–P1</span> evidence</span><span><span class="tag t1">P2–P4</span> build/pilot</span><span><span class="tag t2">P5–P7</span> results/paper</span></p>
+      </section>
+      <section aria-labelledby="records-title"><div class="section-heading"><div><div class="eyebrow">02 / manifest</div><h2 id="records-title">Run records</h2></div><p>Đây là sổ manifest, không phải nơi lưu TensorBoard đầy đủ.</p></div>
+        <div class="card record-panel"><form id="run-form">
+          <div class="field"><label for="run_id">run_id <span class="required">*</span></label><input id="run_id" name="run_id" required placeholder="20260715-A-seed000"></div>
+          <div class="field"><label for="status">status <span class="required">*</span></label><select id="status" name="status" required><option value="planned">planned</option><option value="running">running</option><option value="done">done</option><option value="blocked">blocked</option></select></div>
+          <div class="field"><label for="created_at">created_at</label><input id="created_at" name="created_at" type="datetime-local"></div>
+          <div class="field"><label for="completion.finished_at">completion.finished_at</label><input id="completion.finished_at" name="completion.finished_at" type="datetime-local"></div>
+          <div class="field"><label for="reproducibility.hardware.device">hardware.device</label><input id="reproducibility.hardware.device" name="reproducibility.hardware.device" placeholder="RTX 4090 / CPU"></div>
+          <div class="field wide"><label for="experiment.family">experiment.family <span class="required">*</span></label><select id="experiment.family" name="experiment.family" required><option value="A_sparse_fixed">A_sparse_fixed</option><option value="B_dense_fixed">B_dense_fixed</option><option value="C_sparse_curriculum">C_sparse_curriculum</option><option value="D_dense_curriculum">D_dense_curriculum</option><option value="E_dense_broad">E_dense_broad (optional)</option></select></div>
+          <div class="field wide"><label for="experiment.primary_metric">experiment.primary_metric</label><input id="experiment.primary_metric" name="experiment.primary_metric" value="binary_episode_score_mean"></div>
+          <div class="field wide"><label for="baseline.source_config_path">baseline.source_config_path</label><input id="baseline.source_config_path" name="baseline.source_config_path" value="zoo/pooltool/sum_to_three/config/exp1.py"></div>
+          <div class="field wide"><label for="implementation.reward.config_reference">implementation.reward.config_reference</label><input id="implementation.reward.config_reference" name="implementation.reward.config_reference" placeholder="zoo.pooltool.sum_to_three.config.research_alpha"></div>
+          <div class="field wide"><label for="implementation.curriculum.config_reference">implementation.curriculum.config_reference</label><input id="implementation.curriculum.config_reference" name="implementation.curriculum.config_reference" placeholder="fixed 25/40/35 canonical/local/broad"></div>
+          <div class="field wide"><label for="command.argv">command.argv</label><input id="command.argv" name="command.argv" placeholder="python zoo/.../research_alpha.py --arm A_sparse_fixed --seed 0"></div>
+          <div class="field"><label for="reproducibility.seeds">reproducibility.seeds <span class="required">*</span></label><input id="reproducibility.seeds" name="reproducibility.seeds" required value="0"><span class="helper">Một hoặc nhiều seed, phân tách bằng dấu phẩy.</span></div>
+          <div class="field"><label for="reproducibility.max_env_step">reproducibility.max_env_step</label><input id="reproducibility.max_env_step" name="reproducibility.max_env_step" type="number" min="1" step="1" value="40000"></div>
+          <div class="field wide"><label for="outputs.run_directory">outputs.run_directory</label><input id="outputs.run_directory" name="outputs.run_directory" placeholder="experiments/sum_to_three_curriculum_reward/A_sparse_fixed/seed-0/attempt-01"></div>
+          <div class="field wide"><label for="outputs.metrics">outputs.metrics</label><input id="outputs.metrics" name="outputs.metrics" placeholder="records/A-seed0-scalars.json"></div>
+          <div class="field full"><label for="integrity.notes">integrity.notes</label><textarea id="integrity.notes" name="integrity.notes" placeholder="Plan deviation, failure mode, excluded run reason hoặc ghi chú đánh giá."></textarea></div>
+          <div class="form-actions"><button type="submit" id="save-run">Lưu run manifest</button><button type="button" id="clear-form" class="secondary">Xóa form</button><span id="form-message" role="status"></span></div>
+        </form>
+        <div class="table-wrap"><table><caption class="micro" style="text-align:left;padding:10px;caption-side:top">Các trường có tên khớp templates/run_manifest.json</caption><thead><tr><th>run_id</th><th>experiment.family / seeds</th><th>status</th><th>primary metric</th><th>config references</th><th>outputs</th><th>thao tác</th></tr></thead><tbody id="runs-body"><tr><td colspan="7" style="text-align:center;color:#5d687a">Chưa có run record. Hãy thêm run đầu tiên hoặc nhập JSON.</td></tr></tbody></table></div>
+        <details><summary>Schema JSON và quy tắc nhập</summary><div class="details-inner"><p>Xuất file có <code>schema_version</code>, <code>checklist</code> và <code>runs</code>. Nhập chấp nhận file tracker này, một mảng run, <code>{"runs": [...]}</code>, hoặc một <code>run_manifest.json</code> đơn lẻ. Các record dùng đúng các đường dẫn field của <code>templates/run_manifest.json</code>:</p><div class="manifest-grid" id="schema-fields"></div><p>Tracker giữ nguyên trường bổ sung khi nhập/xuất. Notebook có thể nạp một run manifest lồng nhau, tracker export, hoặc JSON metrics đã chuẩn hóa.</p></div></details>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">Lưu trong trình duyệt này qua localStorage. Xuất JSON trước khi đổi trình duyệt hoặc xóa dữ liệu.</footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+  (() => {
+    'use strict';
+    const KEY = 'sum-to-three-curriculum-reward-tracker-v1';
+    const FIELDS = ['run_id','status','created_at','completion.finished_at','experiment.family','experiment.primary_metric','baseline.source_config_path','implementation.reward.config_reference','implementation.curriculum.config_reference','command.argv','reproducibility.seeds','reproducibility.max_env_step','reproducibility.hardware.device','outputs.run_directory','outputs.metrics','integrity.notes'];
+    const EXTRA_FIELDS = ['repository.commit','repository.branch','repository.dirty_worktree','experiment.question','experiment.hypothesis','experiment.success_criterion','implementation.reward.status','implementation.curriculum.status','reproducibility.evaluation_protocol','reproducibility.hardware','reproducibility.software','outputs.stdout_stderr','outputs.checkpoints','outputs.artifacts','integrity.plan_deviations','integrity.exclusion_reason'];
+    const ALL_FIELDS = [...FIELDS, ...EXTRA_FIELDS];
+    const defaultState = { schema_version: 1, checklist: {}, runs: [] };
+    let state = load(); let editingId = null;
+    const $ = (id) => document.getElementById(id);
+    const escapeHTML = (value) => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    function nowLabel() { return new Intl.DateTimeFormat('vi-VN', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date()); }
+    function toast(message) { const el = $('toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 3200); }
+    function load() { try { const parsed = JSON.parse(localStorage.getItem(KEY)); return normalizeState(parsed); } catch (_) { return structuredClone(defaultState); } }
+    function getPath(object, path) { return path.split('.').reduce((value, key) => value && typeof value === 'object' ? value[key] : undefined, object); }
+    function setPath(object, path, value) { const keys = path.split('.'); const last = keys.pop(); const target = keys.reduce((parent, key) => parent[key] ||= {}, object); target[last] = value; }
+    function normalizeRun(record) { const run = {}; ALL_FIELDS.forEach(key => { const value = record?.[key] ?? getPath(record, key); run[key] = Array.isArray(value) && key === 'reproducibility.seeds' ? value.join(', ') : (value ?? ''); }); Object.keys(record || {}).forEach(key => { if (!Object.hasOwn(run, key)) run[key] = structuredClone(record[key]); }); return run; }
+    function toManifest(run) { const manifest = {}; Object.entries(run).forEach(([key, value]) => { if (!ALL_FIELDS.includes(key) && !key.includes('.')) manifest[key] = structuredClone(value); }); manifest.schema_version = '1.0'; ALL_FIELDS.forEach(key => { let value = run[key]; if (key === 'reproducibility.seeds') value = String(value || '').split(',').map(seed => Number(seed.trim())).filter(Number.isFinite); if (key === 'reproducibility.max_env_step') value = value === '' ? null : Number(value); if (key === 'command.argv') value = String(value || '').trim() ? String(value).trim().split(/\s+/) : []; if (value !== '') setPath(manifest, key, value); }); return manifest; }
+    function normalizeState(raw) { if (Array.isArray(raw)) return { ...structuredClone(defaultState), runs: raw.map(normalizeRun) }; if (!raw || typeof raw !== 'object') return structuredClone(defaultState); if (raw.run_id) return { ...structuredClone(defaultState), schema_version: raw.schema_version || 1, runs: [normalizeRun(raw)] }; return { schema_version: Number(raw.schema_version) || 1, checklist: raw.checklist && typeof raw.checklist === 'object' ? raw.checklist : {}, runs: Array.isArray(raw.runs) ? raw.runs.map(normalizeRun) : [] }; }
+    function save(message = 'Đã lưu cục bộ') { localStorage.setItem(KEY, JSON.stringify(state)); $('sync-state').textContent = message; $('updated-at').textContent = nowLabel(); render(); }
+    function render() {
+      document.querySelectorAll('[data-task]').forEach(input => { input.checked = Boolean(state.checklist[input.dataset.task]); });
+      const total = document.querySelectorAll('[data-task]').length; const complete = Object.values(state.checklist).filter(Boolean).length; const pct = total ? Math.round(100 * complete / total) : 0;
+      $('progress-bar').style.width = pct + '%'; $('progress-text').textContent = `${complete} / ${total} nhiệm vụ hoàn thành · ${pct}%`;
+      $('run-count').textContent = state.runs.length; $('done-count').textContent = state.runs.filter(r => r.status === 'done').length; $('seed-count').textContent = new Set(state.runs.flatMap(r => String(r['reproducibility.seeds'] || '').split(',').map(seed => seed.trim()).filter(Boolean))).size;
+      const body = $('runs-body');
+      body.innerHTML = state.runs.length ? state.runs.map((run, index) => `<tr><td><code>${escapeHTML(run.run_id)}</code><br><small>${escapeHTML(run.created_at)}</small></td><td><span class="tag">${escapeHTML(run['experiment.family'])}</span><br><small>seed: ${escapeHTML(run['reproducibility.seeds'])}</small></td><td><span class="status ${escapeHTML(run.status)}">${escapeHTML(run.status)}</span></td><td>${escapeHTML(run['experiment.primary_metric'])}</td><td><code>${escapeHTML(run['implementation.reward.config_reference'] || run['implementation.curriculum.config_reference'])}</code></td><td>${run['outputs.run_directory'] ? `<small>run: ${escapeHTML(run['outputs.run_directory'])}</small><br>` : ''}${run['outputs.metrics'] ? `<small>metrics: ${escapeHTML(run['outputs.metrics'])}</small>` : '<small>—</small>'}</td><td><div class="row-actions"><button class="secondary" type="button" data-edit="${index}">Sửa</button><button class="danger" type="button" data-delete="${index}">Xóa</button></div></td></tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:#5d687a">Chưa có run record. Hãy thêm run đầu tiên hoặc nhập JSON.</td></tr>';
+      $('schema-fields').innerHTML = ALL_FIELDS.map(field => `<code>${field}${['run_id','status','experiment.family','reproducibility.seeds'].includes(field) ? ' *' : ''}</code>`).join('');
+    }
+    function formToRun() { return normalizeRun(Object.fromEntries(new FormData($('run-form')).entries())); }
+    function resetForm() { $('run-form').reset(); $('experiment.family').value = 'A_sparse_fixed'; $('experiment.primary_metric').value = 'binary_episode_score_mean'; $('baseline.source_config_path').value = 'zoo/pooltool/sum_to_three/config/exp1.py'; $('reproducibility.seeds').value = '0'; $('reproducibility.max_env_step').value = '40000'; editingId = null; $('save-run').textContent = 'Lưu run manifest'; $('form-message').textContent = ''; }
+    function fillForm(run) { FIELDS.forEach(key => { const field = $(key); if (field) field.value = run[key] ?? ''; }); editingId = run.run_id; $('save-run').textContent = 'Cập nhật run record'; $('form-message').textContent = `Đang sửa ${run.run_id}`; window.scrollTo({ top: $('run-form').getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' }); }
+    function markdown() { const complete = Object.values(state.checklist).filter(Boolean).length; const total = document.querySelectorAll('[data-task]').length; const byArm = [...new Set(state.runs.map(r => r['experiment.family']).filter(Boolean))].join(', ') || 'chưa có'; const checklist = Array.from(document.querySelectorAll('[data-task]')).map(i => `- [${state.checklist[i.dataset.task] ? 'x' : ' '}] ${i.closest('label').innerText.replace(/\n+/g, ' — ')}`).join('\n'); const runs = state.runs.length ? state.runs.map(r => `| ${r.run_id} | ${r['experiment.family']} | ${r['reproducibility.seeds']} | ${r.status} | ${r['experiment.primary_metric']} | ${r['outputs.metrics']} |`).join('\n') : '| — | — | — | — | — | — |'; return `# Sum-to-Three — tiến độ curriculum reward\n\n- Protocol: **${complete}/${total}** nhiệm vụ hoàn thành\n- Run manifests: **${state.runs.length}** (arms: ${byArm})\n\n## Checklist\n${checklist}\n\n## Run manifest\n| run_id | experiment.family | reproducibility.seeds | status | experiment.primary_metric | outputs.metrics |\n|---|---|---|---|---|---|\n${runs}\n\n_Generated locally: ${new Date().toISOString()}_`; }
+    document.querySelectorAll('[data-task]').forEach(input => input.addEventListener('change', () => { state.checklist[input.dataset.task] = input.checked; save(); }));
+    $('run-form').addEventListener('submit', event => { event.preventDefault(); const run = formToRun(); const duplicate = state.runs.findIndex(r => r.run_id === run.run_id); if (duplicate >= 0 && editingId !== run.run_id) { $('form-message').textContent = 'run_id đã tồn tại; hãy chọn ID khác hoặc sửa record đó.'; return; } if (editingId) { const index = state.runs.findIndex(r => r.run_id === editingId); if (index >= 0) state.runs[index] = { ...state.runs[index], ...run }; } else { state.runs.push(run); } save(); $('form-message').textContent = `Đã lưu ${run.run_id}.`; editingId = null; $('save-run').textContent = 'Lưu run record'; });
+    $('clear-form').addEventListener('click', resetForm);
+    $('runs-body').addEventListener('click', event => { const button = event.target.closest('button'); if (!button) return; const index = Number(button.dataset.edit ?? button.dataset.delete); if (!Number.isInteger(index) || !state.runs[index]) return; if (button.dataset.edit !== undefined) fillForm(state.runs[index]); if (button.dataset.delete !== undefined && confirm(`Xóa run record ${state.runs[index].run_id}?`)) { state.runs.splice(index, 1); save('Đã xóa run record'); resetForm(); } });
+    $('export-json').addEventListener('click', () => { const exported = { ...state, runs: state.runs.map(toManifest) }; const blob = new Blob([JSON.stringify(exported, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'sum_to_three_run_manifest.json'; link.click(); URL.revokeObjectURL(url); toast('Đã xuất JSON với field names run_manifest.'); });
+    $('import-json').addEventListener('change', async event => { const file = event.target.files?.[0]; if (!file) return; try { const raw = JSON.parse(await file.text()); const version = Number(raw?.schema_version ?? 1); if (version !== 1) throw new Error(`schema_version ${version} không được hỗ trợ`); const imported = normalizeState(raw); if (!Array.isArray(imported.runs)) throw new Error('runs không hợp lệ'); if (!confirm(`Nhập ${imported.runs.length} run records và thay thế dữ liệu hiện tại?`)) return; state = imported; resetForm(); save('Đã nhập JSON'); toast('Đã nhập dữ liệu hợp lệ.'); } catch (error) { toast(`Không thể nhập JSON: ${error.message}`); } finally { event.target.value = ''; } });
+    $('copy-summary').addEventListener('click', async () => { try { await navigator.clipboard.writeText(markdown()); toast('Đã sao chép tóm tắt Markdown.'); } catch (_) { const area = document.createElement('textarea'); area.value = markdown(); document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); toast('Đã sao chép tóm tắt Markdown.'); } });
+    $('reset-all').addEventListener('click', () => { if (!confirm('Xóa toàn bộ checklist và run records khỏi trình duyệt này? Hành động này không thể hoàn tác.')) return; state = structuredClone(defaultState); localStorage.removeItem(KEY); resetForm(); save('Đã đặt lại dữ liệu'); toast('Đã xóa toàn bộ dữ liệu cục bộ.'); });
+    render();
+  })();
+  </script>
+</body>
+</html>

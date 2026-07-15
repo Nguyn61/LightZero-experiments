@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "run_id": "YYYYMMDD-A_sparse_fixed-main-seed000",
+  "arm": "A_sparse_fixed",
+  "seed": 0,
+  "checkpoint": {
+    "path": null,
+    "sha256": null,
+    "selection_rule": "best canonical binary validation score"
+  },
+  "learning_curve": {
+    "binary_series_path": null,
+    "binary_learning_curve_auc": null,
+    "final_binary_validation_score": null,
+    "collector_return_is_diagnostic_only": true
+  },
+  "evaluations": {
+    "canonical": {
+      "episodes": 100,
+      "binary_episode_score_mean": null,
+      "binary_episode_score_std": null,
+      "binary_per_shot_success_rate": null
+    },
+    "local": {
+      "episodes": 100,
+      "binary_episode_score_mean": null,
+      "binary_episode_score_std": null,
+      "binary_per_shot_success_rate": null
+    },
+    "broad": {
+      "episodes": 100,
+      "binary_episode_score_mean": null,
+      "binary_episode_score_std": null,
+      "binary_per_shot_success_rate": null
+    }
+  },
+  "diagnostics": {
+    "contact_rate": null,
+    "cushion_histogram_given_contact": {},
+    "reward_mismatch_flag": null,
+    "simulator_anomaly_count": null
+  },
+  "cost": {
+    "wall_time_seconds": null,
+    "environment_steps_per_second": null,
+    "device": null
+  },
+  "integrity": {
+    "comparison_ready": false,
+    "invalidated": false,
+    "exclusion_reason": null,
+    "limitations": [],
+    "notes": null
+  }
+}
