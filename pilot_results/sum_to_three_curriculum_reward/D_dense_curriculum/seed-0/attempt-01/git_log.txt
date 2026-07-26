@@ -1,0 +1,53 @@
+v0.2.0-50-g1dc0677a
+
+commit 1dc0677aaaf0c9558e1b54671c83988113f12c65
+Merge: b895a097 676df2d9
+Author: 蒲源 <2402552459@qq.com>
+Date:   Sat Jul 18 00:33:00 2026 +0800
+
+    Merge branch 'main' of https://github.com/opendilab/LightZero
+
+commit b895a097d8cb373a6c9c1bf8370b886de626f2e3
+Author: 蒲源 <2402552459@qq.com>
+Date:   Sat Jul 18 00:25:33 2026 +0800
+
+    polish(pu): update mcts_rl_evolution_overview
+
+ assets/mcts_rl_evolution_overview.png | Bin 894009 -> 1935475 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 2577cc9706e65d1d86305fea8760b55f65d01945
+Author: 蒲源 <2402552459@qq.com>
+Date:   Sat Jul 18 00:19:49 2026 +0800
+
+    polish(pu): update mcts_rl_evolution_overview
+
+ assets/mcts_rl_evolution_overview.png | Bin 1373126 -> 894009 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 676df2d9e454838e7f2118a8c3421cf8526cc3b4
+Author: 蒲源 <48008469+puyuan1996@users.noreply.github.com>
+Date:   Wed Jul 1 17:29:26 2026 +0800
+
+    fix(pu): align Sampled EfficientZero obs shape (#487)
+    
+    * fix(atari): align sampled efficientzero obs shape
+    
+    * fix(atari): support legacy noframeskip action map ids
+
+ zoo/atari/config/atari_env_action_space_map.py     |  7 +++-
+ .../config/atari_sampled_efficientzero_config.py   |  6 +++-
+ .../test_atari_sampled_efficientzero_config.py     | 39 ++++++++++++++++++++--
+ 3 files changed, 47 insertions(+), 5 deletions(-)
+
+commit 1df991cb9088020a7fbdf2d5bef7f48005f69109
+Author: 蒲源 <48008469+puyuan1996@users.noreply.github.com>
+Date:   Wed Jul 1 17:27:53 2026 +0800
+
+    fix(buffer): index sampled target policies by slot (#488)
+
+ lzero/mcts/buffer/game_buffer_muzero.py            | 24 ++++++--
+ .../buffer/game_buffer_sampled_efficientzero.py    | 14 ++++-
+ lzero/mcts/buffer/game_buffer_sampled_muzero.py    | 14 ++++-
+ lzero/mcts/tests/test_game_buffer.py               | 64 ++++++++++++++++++++++
+ 4 files changed, 107 insertions(+), 9 deletions(-)

@@ -1,0 +1,3376 @@
+{
+  "schema_version": 1,
+  "policy": "uniform_random_normalized_action",
+  "seed": 0,
+  "results": [
+    {
+      "start_distribution": "canonical",
+      "episodes": 100,
+      "shots": 1000,
+      "contact_rate": 0.992,
+      "exact_three_success_rate": 0.137,
+      "cushion_histogram_given_contact": {
+        "0": 33,
+        "1": 65,
+        "2": 93,
+        "3": 137,
+        "4": 151,
+        "5": 153,
+        "6": 139,
+        "7": 105,
+        "8": 79,
+        "9": 29,
+        "10": 8
+      },
+      "episode_records": [
+        {
+          "episode_id": 0,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 1,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 2,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 3,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 4,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 5,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 6,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 7,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 8,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 9,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 10,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 11,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 12,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 13,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 14,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 15,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 16,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 17,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 18,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 19,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 20,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 21,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 22,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 23,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 24,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 25,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 26,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 27,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 28,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 29,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 30,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 31,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 32,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 33,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 34,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 35,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 36,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 37,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 38,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 39,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 40,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 41,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 42,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 43,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 44,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 45,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 46,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 47,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 48,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 49,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 50,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 51,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 52,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 53,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 54,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 55,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 56,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 57,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 58,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 59,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 60,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 61,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 62,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 63,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 64,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 65,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 66,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 67,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 68,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 69,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 70,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 71,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 72,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 5
+        },
+        {
+          "episode_id": 73,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 74,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 75,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 8,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 76,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 77,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 78,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 79,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 80,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 81,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 82,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 83,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 84,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 85,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 86,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 87,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 88,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 89,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 90,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 91,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 92,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 93,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 94,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 95,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 96,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 97,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 98,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 99,
+          "initial_observation": [
+            0.3050000071525574,
+            0.3050000071525574,
+            0.3050000071525574,
+            0.9150000214576721
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        }
+      ]
+    },
+    {
+      "start_distribution": "local",
+      "episodes": 100,
+      "shots": 1000,
+      "contact_rate": 0.994,
+      "exact_three_success_rate": 0.15,
+      "cushion_histogram_given_contact": {
+        "0": 27,
+        "1": 71,
+        "2": 85,
+        "3": 150,
+        "4": 137,
+        "5": 149,
+        "6": 143,
+        "7": 114,
+        "8": 78,
+        "9": 32,
+        "10": 7,
+        "11": 1
+      },
+      "episode_records": [
+        {
+          "episode_id": 0,
+          "initial_observation": [
+            0.317031592130661,
+            0.2623077630996704,
+            0.26467618346214294,
+            0.8253417611122131
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 5
+        },
+        {
+          "episode_id": 1,
+          "initial_observation": [
+            0.33251965045928955,
+            0.3815440237522125,
+            0.3143675625324249,
+            0.9575592875480652
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 2,
+          "initial_observation": [
+            0.3088322877883911,
+            0.385682612657547,
+            0.33274659514427185,
+            0.8227846622467041
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 3,
+          "initial_observation": [
+            0.3363966643810272,
+            0.2185051292181015,
+            0.32517439126968384,
+            0.854851484298706
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 4,
+          "initial_observation": [
+            0.33690395951271057,
+            0.31268882751464844,
+            0.287405401468277,
+            0.9006626009941101
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 5,
+          "initial_observation": [
+            0.2635645866394043,
+            0.2353246808052063,
+            0.3199887275695801,
+            0.9422957897186279
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 6,
+          "initial_observation": [
+            0.3151361644268036,
+            0.283428430557251,
+            0.3486781120300293,
+            1.004169225692749
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 7,
+          "initial_observation": [
+            0.3212991952896118,
+            0.33290213346481323,
+            0.32155436277389526,
+            0.8944008946418762
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 8,
+          "initial_observation": [
+            0.27294453978538513,
+            0.3460742235183716,
+            0.3072272837162018,
+            0.8798100352287292
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 9,
+          "initial_observation": [
+            0.3037557005882263,
+            0.37722912430763245,
+            0.34312915802001953,
+            0.8886286020278931
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 10,
+          "initial_observation": [
+            0.3112836480140686,
+            0.2719663083553314,
+            0.31328392028808594,
+            0.8849412202835083
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 11,
+          "initial_observation": [
+            0.2954791188240051,
+            0.3773749768733978,
+            0.2810317873954773,
+            0.9378446340560913
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 12,
+          "initial_observation": [
+            0.26845723390579224,
+            0.3666876554489136,
+            0.3302205502986908,
+            0.8666669726371765
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 13,
+          "initial_observation": [
+            0.3380727767944336,
+            0.22313803434371948,
+            0.2906034588813782,
+            0.8501455783843994
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 14,
+          "initial_observation": [
+            0.30063748359680176,
+            0.35995227098464966,
+            0.2813378870487213,
+            0.8319239616394043
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 15,
+          "initial_observation": [
+            0.29661521315574646,
+            0.24909032881259918,
+            0.26904913783073425,
+            0.9298973679542542
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 16,
+          "initial_observation": [
+            0.2873161733150482,
+            0.33689582347869873,
+            0.27860352396965027,
+            0.9969882965087891
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 17,
+          "initial_observation": [
+            0.2931504249572754,
+            0.23184052109718323,
+            0.31634169816970825,
+            0.9942142963409424
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 18,
+          "initial_observation": [
+            0.2997623383998871,
+            0.38930216431617737,
+            0.30499085783958435,
+            0.9011338949203491
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 19,
+          "initial_observation": [
+            0.31556031107902527,
+            0.39681386947631836,
+            0.3444380760192871,
+            0.9075905084609985
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 20,
+          "initial_observation": [
+            0.327640563249588,
+            0.3045220375061035,
+            0.30757495760917664,
+            0.9679979085922241
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 21,
+          "initial_observation": [
+            0.2975028157234192,
+            0.3484841287136078,
+            0.3235481381416321,
+            0.9951239228248596
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 22,
+          "initial_observation": [
+            0.2711732089519501,
+            0.3474700152873993,
+            0.3425476551055908,
+            1.0017752647399902
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 23,
+          "initial_observation": [
+            0.26236870884895325,
+            0.3724357485771179,
+            0.34727126359939575,
+            0.9997879862785339
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 24,
+          "initial_observation": [
+            0.2741451859474182,
+            0.39264732599258423,
+            0.3392544388771057,
+            0.9747830629348755
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 25,
+          "initial_observation": [
+            0.3032419979572296,
+            0.25536951422691345,
+            0.33151912689208984,
+            0.9935421347618103
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 26,
+          "initial_observation": [
+            0.28445538878440857,
+            0.3122202455997467,
+            0.2999710440635681,
+            0.994930624961853
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 27,
+          "initial_observation": [
+            0.26463553309440613,
+            0.34802472591400146,
+            0.3150472640991211,
+            0.8275370597839355
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 28,
+          "initial_observation": [
+            0.32425767183303833,
+            0.2152424156665802,
+            0.32766005396842957,
+            0.917366087436676
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 29,
+          "initial_observation": [
+            0.3426952660083771,
+            0.22453156113624573,
+            0.3349834978580475,
+            0.8346441984176636
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 30,
+          "initial_observation": [
+            0.291323184967041,
+            0.29207414388656616,
+            0.3459418714046478,
+            0.9265406727790833
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 31,
+          "initial_observation": [
+            0.2838171124458313,
+            0.25709468126296997,
+            0.33909478783607483,
+            0.8641634583473206
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 32,
+          "initial_observation": [
+            0.2720184922218323,
+            0.26574671268463135,
+            0.3125655949115753,
+            0.9250308871269226
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 33,
+          "initial_observation": [
+            0.33220696449279785,
+            0.31621503829956055,
+            0.2864135801792145,
+            0.8988469243049622
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 34,
+          "initial_observation": [
+            0.3329457938671112,
+            0.328460156917572,
+            0.34532833099365234,
+            0.8907815217971802
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 35,
+          "initial_observation": [
+            0.3096217215061188,
+            0.3224179148674011,
+            0.33559611439704895,
+            0.8492543697357178
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 36,
+          "initial_observation": [
+            0.2967872619628906,
+            0.38102540373802185,
+            0.264860063791275,
+            0.9748446941375732
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 37,
+          "initial_observation": [
+            0.29756680130958557,
+            0.36616095900535583,
+            0.2619512677192688,
+            0.8899732828140259
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 38,
+          "initial_observation": [
+            0.26798415184020996,
+            0.3333018124103546,
+            0.2851334512233734,
+            0.9525811076164246
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 39,
+          "initial_observation": [
+            0.3439863622188568,
+            0.2357945740222931,
+            0.33704444766044617,
+            0.833304226398468
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 40,
+          "initial_observation": [
+            0.2945261299610138,
+            0.29197683930397034,
+            0.3040204644203186,
+            1.003358244895935
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 41,
+          "initial_observation": [
+            0.32921847701072693,
+            0.2695532739162445,
+            0.28478097915649414,
+            0.9823393225669861
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 42,
+          "initial_observation": [
+            0.33849647641181946,
+            0.3069854974746704,
+            0.29132193326950073,
+            1.0067806243896484
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 43,
+          "initial_observation": [
+            0.28883129358291626,
+            0.24616014957427979,
+            0.3383902609348297,
+            0.9729214906692505
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 44,
+          "initial_observation": [
+            0.31974849104881287,
+            0.39001116156578064,
+            0.3423974812030792,
+            0.9610368013381958
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 45,
+          "initial_observation": [
+            0.33668631315231323,
+            0.25810927152633667,
+            0.2734847962856293,
+            0.9465373754501343
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 46,
+          "initial_observation": [
+            0.323853462934494,
+            0.24325616657733917,
+            0.2958250939846039,
+            0.9910804629325867
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 47,
+          "initial_observation": [
+            0.3103938400745392,
+            0.31952711939811707,
+            0.2781304121017456,
+            0.9198257327079773
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 48,
+          "initial_observation": [
+            0.3070586621761322,
+            0.22876960039138794,
+            0.34733691811561584,
+            0.9282400608062744
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 49,
+          "initial_observation": [
+            0.261639803647995,
+            0.3555618226528168,
+            0.347013920545578,
+            0.9316660761833191
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 50,
+          "initial_observation": [
+            0.2891596853733063,
+            0.24704943597316742,
+            0.3201558291912079,
+            0.8584587574005127
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 51,
+          "initial_observation": [
+            0.31182458996772766,
+            0.3239598870277405,
+            0.3456222116947174,
+            0.8356781601905823
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 52,
+          "initial_observation": [
+            0.30499762296676636,
+            0.3502669930458069,
+            0.2766455411911011,
+            0.8942424058914185
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 53,
+          "initial_observation": [
+            0.26660194993019104,
+            0.34688878059387207,
+            0.2687869071960449,
+            0.8955451250076294
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 54,
+          "initial_observation": [
+            0.3378126323223114,
+            0.29986318945884705,
+            0.3412473499774933,
+            0.9643133878707886
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 55,
+          "initial_observation": [
+            0.3414847254753113,
+            0.23590323328971863,
+            0.26753902435302734,
+            0.8353185653686523
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 56,
+          "initial_observation": [
+            0.3374025225639343,
+            0.3298628032207489,
+            0.3046988248825073,
+            0.8526053428649902
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 57,
+          "initial_observation": [
+            0.3202618658542633,
+            0.27125197649002075,
+            0.3235250413417816,
+            0.9076480269432068
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 58,
+          "initial_observation": [
+            0.30565619468688965,
+            0.3587174713611603,
+            0.2692241668701172,
+            0.9296054840087891
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 59,
+          "initial_observation": [
+            0.2784031927585602,
+            0.3621428608894348,
+            0.3040201663970947,
+            1.0056267976760864
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 60,
+          "initial_observation": [
+            0.27714771032333374,
+            0.3908652365207672,
+            0.3314344882965088,
+            0.9115248322486877
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 61,
+          "initial_observation": [
+            0.3325428366661072,
+            0.3240729570388794,
+            0.3186268210411072,
+            0.9917174577713013
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 62,
+          "initial_observation": [
+            0.2668105661869049,
+            0.3671223521232605,
+            0.2946178615093231,
+            0.8826480507850647
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 63,
+          "initial_observation": [
+            0.34839847683906555,
+            0.357145756483078,
+            0.3037293255329132,
+            0.9006516933441162
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 64,
+          "initial_observation": [
+            0.3381645679473877,
+            0.22837629914283752,
+            0.3233088254928589,
+            0.9686226844787598
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 65,
+          "initial_observation": [
+            0.3312833309173584,
+            0.27204370498657227,
+            0.33105868101119995,
+            0.8640631437301636
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 66,
+          "initial_observation": [
+            0.292904257774353,
+            0.2896910607814789,
+            0.30863770842552185,
+            0.8431605696678162
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 67,
+          "initial_observation": [
+            0.29682570695877075,
+            0.2123325616121292,
+            0.32646796107292175,
+            0.9802541136741638
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 68,
+          "initial_observation": [
+            0.273281455039978,
+            0.342791348695755,
+            0.33320775628089905,
+            1.0043532848358154
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 69,
+          "initial_observation": [
+            0.3352007567882538,
+            0.2909258306026459,
+            0.347138911485672,
+            1.0028986930847168
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 70,
+          "initial_observation": [
+            0.3053230047225952,
+            0.35200074315071106,
+            0.3413541615009308,
+            0.910576581954956
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 71,
+          "initial_observation": [
+            0.33695730566978455,
+            0.342380166053772,
+            0.2868969738483429,
+            0.9646351337432861
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 5
+        },
+        {
+          "episode_id": 72,
+          "initial_observation": [
+            0.31120941042900085,
+            0.22968004643917084,
+            0.2954581677913666,
+            0.8359518051147461
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 73,
+          "initial_observation": [
+            0.3029063642024994,
+            0.29174792766571045,
+            0.2983005940914154,
+            0.9310041069984436
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 74,
+          "initial_observation": [
+            0.2718547284603119,
+            0.3854408860206604,
+            0.3211681544780731,
+            0.9750440716743469
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 75,
+          "initial_observation": [
+            0.3398575484752655,
+            0.32045140862464905,
+            0.26460981369018555,
+            0.9542194604873657
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 76,
+          "initial_observation": [
+            0.311063677072525,
+            0.3654475808143616,
+            0.3078251779079437,
+            0.9730899930000305
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 77,
+          "initial_observation": [
+            0.34866055846214294,
+            0.27728593349456787,
+            0.27610042691230774,
+            0.8949114680290222
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 78,
+          "initial_observation": [
+            0.3272295296192169,
+            0.293730229139328,
+            0.31276386976242065,
+            0.845894992351532
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 79,
+          "initial_observation": [
+            0.32486414909362793,
+            0.2642170786857605,
+            0.2778218686580658,
+            0.9823077917098999
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 80,
+          "initial_observation": [
+            0.31065842509269714,
+            0.30212539434432983,
+            0.34003522992134094,
+            0.8382275104522705
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 81,
+          "initial_observation": [
+            0.3222314715385437,
+            0.2730999290943146,
+            0.2764859199523926,
+            0.9474157691001892
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 82,
+          "initial_observation": [
+            0.2929494082927704,
+            0.27345478534698486,
+            0.3439754843711853,
+            0.859235942363739
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 83,
+          "initial_observation": [
+            0.30606940388679504,
+            0.21672996878623962,
+            0.27542808651924133,
+            0.9861035943031311
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 84,
+          "initial_observation": [
+            0.33040934801101685,
+            0.3155399262905121,
+            0.2806185185909271,
+            0.925709068775177
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 85,
+          "initial_observation": [
+            0.2621438205242157,
+            0.3444989025592804,
+            0.3240407705307007,
+            0.9420835375785828
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 86,
+          "initial_observation": [
+            0.31478071212768555,
+            0.22594724595546722,
+            0.28272268176078796,
+            0.9287931323051453
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 87,
+          "initial_observation": [
+            0.2957046926021576,
+            0.3962439298629761,
+            0.34222450852394104,
+            0.8504661321640015
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 88,
+          "initial_observation": [
+            0.3129027187824249,
+            0.34138739109039307,
+            0.27307164669036865,
+            0.8802465200424194
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 89,
+          "initial_observation": [
+            0.3239676058292389,
+            0.37938404083251953,
+            0.2910976707935333,
+            0.8665880560874939
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 90,
+          "initial_observation": [
+            0.33326825499534607,
+            0.32075974345207214,
+            0.3029433786869049,
+            0.8697788715362549
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 91,
+          "initial_observation": [
+            0.26745957136154175,
+            0.21559469401836395,
+            0.3120250999927521,
+            0.8577175140380859
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 92,
+          "initial_observation": [
+            0.3467738628387451,
+            0.23220805823802948,
+            0.3007911741733551,
+            0.8954650163650513
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 93,
+          "initial_observation": [
+            0.2814845144748688,
+            0.3511308431625366,
+            0.31762394309043884,
+            0.9568659663200378
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 94,
+          "initial_observation": [
+            0.2683512270450592,
+            0.2776918113231659,
+            0.30674225091934204,
+            0.901410698890686
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 95,
+          "initial_observation": [
+            0.26464492082595825,
+            0.24825848639011383,
+            0.34409379959106445,
+            0.8524247407913208
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 96,
+          "initial_observation": [
+            0.33592653274536133,
+            0.36473917961120605,
+            0.2954505383968353,
+            0.9088401198387146
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 97,
+          "initial_observation": [
+            0.3334623873233795,
+            0.33850762248039246,
+            0.3345992863178253,
+            0.9627703428268433
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 98,
+          "initial_observation": [
+            0.3218024969100952,
+            0.3815845549106598,
+            0.33335745334625244,
+            0.85548335313797
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 99,
+          "initial_observation": [
+            0.32680562138557434,
+            0.22835153341293335,
+            0.29848673939704895,
+            0.8958529829978943
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        }
+      ]
+    },
+    {
+      "start_distribution": "broad",
+      "episodes": 100,
+      "shots": 1000,
+      "contact_rate": 0.988,
+      "exact_three_success_rate": 0.139,
+      "cushion_histogram_given_contact": {
+        "0": 20,
+        "1": 76,
+        "2": 93,
+        "3": 139,
+        "4": 148,
+        "5": 149,
+        "6": 141,
+        "7": 102,
+        "8": 73,
+        "9": 41,
+        "10": 4,
+        "11": 1,
+        "12": 1
+      },
+      "episode_records": [
+        {
+          "episode_id": 0,
+          "initial_observation": [
+            0.3801974356174469,
+            0.3431735932826996,
+            0.052976105362176895,
+            0.04963618889451027
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 1,
+          "initial_observation": [
+            0.47699788212776184,
+            1.0884002447128296,
+            0.36354729533195496,
+            0.8759956955909729
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 2,
+          "initial_observation": [
+            0.3289518654346466,
+            1.1142663955688477,
+            0.47841623425483704,
+            0.03365403041243553
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 3,
+          "initial_observation": [
+            0.5012292265892029,
+            0.06940702348947525,
+            0.43109002709388733,
+            0.23407189548015594
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 4,
+          "initial_observation": [
+            0.5043997764587402,
+            0.6580551862716675,
+            0.19503381848335266,
+            0.5203914046287537
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 5,
+          "initial_observation": [
+            0.046028632670640945,
+            0.1745292842388153,
+            0.39867961406707764,
+            0.780598521232605
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 6,
+          "initial_observation": [
+            0.3683510422706604,
+            0.4751776456832886,
+            0.5779881477355957,
+            1.1673073768615723
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 7,
+          "initial_observation": [
+            0.4068699777126312,
+            0.7843883037567139,
+            0.40846478939056396,
+            0.48125550150871277
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 8,
+          "initial_observation": [
+            0.10465338826179504,
+            0.86671382188797,
+            0.3189205229282379,
+            0.39006274938583374
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 9,
+          "initial_observation": [
+            0.2972230315208435,
+            1.0614320039749146,
+            0.5433072447776794,
+            0.44517895579338074
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 10,
+          "initial_observation": [
+            0.24549449980258942,
+            1.0623435974121094,
+            0.1551986038684845,
+            0.7527788281440735
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 11,
+          "initial_observation": [
+            0.07660778611898422,
+            0.995547890663147,
+            0.46262845396995544,
+            0.3079187572002411
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 12,
+          "initial_observation": [
+            0.5117049217224121,
+            0.09836269170045853,
+            0.21502171456813812,
+            0.20465990900993347
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 13,
+          "initial_observation": [
+            0.27773433923721313,
+            0.9534516930580139,
+            0.15711179375648499,
+            0.090774767100811
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 14,
+          "initial_observation": [
+            0.2525951564311981,
+            0.26056456565856934,
+            0.08030705153942108,
+            0.7031084299087524
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 15,
+          "initial_observation": [
+            0.19447612762451172,
+            0.8093489408493042,
+            0.14002196490764618,
+            1.1224267482757568
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 16,
+          "initial_observation": [
+            0.2309400886297226,
+            0.15275324881076813,
+            0.375885546207428,
+            1.1050891876220703
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 17,
+          "initial_observation": [
+            0.27226465940475464,
+            1.1368886232376099,
+            0.304942786693573,
+            0.5233370065689087
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 18,
+          "initial_observation": [
+            0.3710019886493683,
+            1.1838366985321045,
+            0.5514880418777466,
+            0.563690721988678
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 19,
+          "initial_observation": [
+            0.4465034306049347,
+            0.6070128083229065,
+            0.3210935592651367,
+            0.9412370324134827
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 20,
+          "initial_observation": [
+            0.2581426501274109,
+            0.8817758560180664,
+            0.42092588543891907,
+            1.1107745170593262
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 21,
+          "initial_observation": [
+            0.09358261525630951,
+            0.8754376769065857,
+            0.5396728515625,
+            1.1523451805114746
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 22,
+          "initial_observation": [
+            0.038554348051548004,
+            1.0314733982086182,
+            0.5691953301429749,
+            1.1399248838424683
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 23,
+          "initial_observation": [
+            0.11215739697217941,
+            1.1577956676483154,
+            0.5190902352333069,
+            0.9836441874504089
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 24,
+          "initial_observation": [
+            0.29401257634162903,
+            0.2998095154762268,
+            0.4707445204257965,
+            1.1008883714675903
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 25,
+          "initial_observation": [
+            0.17659616470336914,
+            0.6551265120506287,
+            0.2735690176486969,
+            1.109566330909729
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 26,
+          "initial_observation": [
+            0.05272199958562851,
+            0.8789044618606567,
+            0.36779549717903137,
+            0.06335659325122833
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 27,
+          "initial_observation": [
+            0.42536041140556335,
+            0.04901505261659622,
+            0.44662541151046753,
+            0.6247878670692444
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 28,
+          "initial_observation": [
+            0.2195199579000473,
+            0.5292134284973145,
+            0.5608867406845093,
+            0.6821292042732239
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 29,
+          "initial_observation": [
+            0.17260701954364777,
+            0.31059181690216064,
+            0.5180924534797668,
+            0.2922717034816742
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 30,
+          "initial_observation": [
+            0.09886551648378372,
+            0.3646668791770935,
+            0.3522849977016449,
+            0.6726930737495422
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 31,
+          "initial_observation": [
+            0.4750435948371887,
+            0.6800940632820129,
+            0.1888347864151001,
+            0.5090433955192566
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 32,
+          "initial_observation": [
+            0.47966113686561584,
+            0.7566260695457458,
+            0.5570520162582397,
+            0.45863449573516846
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 33,
+          "initial_observation": [
+            0.3338858187198639,
+            0.7188618779182434,
+            0.4962258040904999,
+            0.1990896463394165
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 34,
+          "initial_observation": [
+            0.25367042422294617,
+            1.0851588249206543,
+            0.05412544310092926,
+            0.9840294718742371
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 35,
+          "initial_observation": [
+            0.2585424482822418,
+            0.9922559857368469,
+            0.035945452749729156,
+            0.45358309149742126
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 4
+        },
+        {
+          "episode_id": 36,
+          "initial_observation": [
+            0.0736510381102562,
+            0.7868863940238953,
+            0.1808341145515442,
+            0.8448818325996399
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 37,
+          "initial_observation": [
+            0.5486647486686707,
+            0.17746609449386597,
+            0.5052778720855713,
+            0.0994013324379921
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 38,
+          "initial_observation": [
+            0.23953823745250702,
+            0.5286053419113159,
+            0.2988779544830322,
+            1.1622388362884521
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 39,
+          "initial_observation": [
+            0.4563654959201813,
+            0.3884580433368683,
+            0.17863118648529053,
+            1.030870795249939
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 40,
+          "initial_observation": [
+            0.5143529176712036,
+            0.6224092841148376,
+            0.21951213479042053,
+            1.183629035949707
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 41,
+          "initial_observation": [
+            0.20394563674926758,
+            0.2422509491443634,
+            0.5136891007423401,
+            0.9720092415809631
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 42,
+          "initial_observation": [
+            0.3971779942512512,
+            1.141319751739502,
+            0.5387343168258667,
+            0.8977299332618713
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 43,
+          "initial_observation": [
+            0.5030394792556763,
+            0.31693294644355774,
+            0.10803000628948212,
+            0.807108461856842
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 44,
+          "initial_observation": [
+            0.4228341579437256,
+            0.2241010218858719,
+            0.24765676259994507,
+            1.0855028629302979
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 45,
+          "initial_observation": [
+            0.3387114703655243,
+            0.7007944583892822,
+            0.13706500828266144,
+            0.6401607990264893
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 46,
+          "initial_observation": [
+            0.31786659359931946,
+            0.1335599571466446,
+            0.569605827331543,
+            0.6927503347396851
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 47,
+          "initial_observation": [
+            0.03399873152375221,
+            0.926011323928833,
+            0.5675870180130005,
+            0.7141629457473755
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 48,
+          "initial_observation": [
+            0.2059980034828186,
+            0.24780894815921783,
+            0.3997240364551544,
+            0.2566172778606415
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 49,
+          "initial_observation": [
+            0.34765374660491943,
+            0.7284992933273315,
+            0.5588887929916382,
+            0.11423833668231964
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 50,
+          "initial_observation": [
+            0.30498507618904114,
+            0.8929187655448914,
+            0.12778456509113312,
+            0.4802648723125458
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 51,
+          "initial_observation": [
+            0.0650121420621872,
+            0.87180495262146,
+            0.07866808027029037,
+            0.48840710520744324
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 52,
+          "initial_observation": [
+            0.5100788474082947,
+            0.5778949856758118,
+            0.5315459370613098,
+            0.9182085990905762
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 53,
+          "initial_observation": [
+            0.5330294966697693,
+            0.17814518511295319,
+            0.07086897641420364,
+            0.11199094355106354
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 54,
+          "initial_observation": [
+            0.5075157880783081,
+            0.7653924822807312,
+            0.3031177222728729,
+            0.22003336250782013
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 55,
+          "initial_observation": [
+            0.40038660168647766,
+            0.39907488226890564,
+            0.4207814931869507,
+            0.5640502572059631
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 56,
+          "initial_observation": [
+            0.30910125374794006,
+            0.9457341432571411,
+            0.08140097558498383,
+            0.7012842297554016
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 57,
+          "initial_observation": [
+            0.13876987993717194,
+            0.9671428203582764,
+            0.298876017332077,
+            1.1764174699783325
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 58,
+          "initial_observation": [
+            0.13092319667339325,
+            1.1466577053070068,
+            0.47021549940109253,
+            0.5882801413536072
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 59,
+          "initial_observation": [
+            0.4771427512168884,
+            0.7292059659957886,
+            0.3901676833629608,
+            1.0894840955734253
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 60,
+          "initial_observation": [
+            0.06631606817245483,
+            0.998264729976654,
+            0.2401115894317627,
+            0.4078003764152527
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 61,
+          "initial_observation": [
+            0.5762404799461365,
+            0.9359110593795776,
+            0.29705822467803955,
+            0.5203232169151306
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 62,
+          "initial_observation": [
+            0.5122784972190857,
+            0.13110190629959106,
+            0.4194302260875702,
+            0.9451417922973633
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 63,
+          "initial_observation": [
+            0.4692707657814026,
+            0.4040232002735138,
+            0.46786677837371826,
+            0.2916446626186371
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 64,
+          "initial_observation": [
+            0.22940155863761902,
+            0.5143190622329712,
+            0.3277357518672943,
+            0.1610037386417389
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 65,
+          "initial_observation": [
+            0.253910630941391,
+            0.030828511342406273,
+            0.4391748011112213,
+            1.0178382396697998
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 66,
+          "initial_observation": [
+            0.10675904899835587,
+            0.8461958765983582,
+            0.48129844665527344,
+            1.168458342552185
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 67,
+          "initial_observation": [
+            0.4937547743320465,
+            0.5220363736152649,
+            0.5683683156967163,
+            1.1593668460845947
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 68,
+          "initial_observation": [
+            0.30701881647109985,
+            0.9037546515464783,
+            0.5322134494781494,
+            0.5823534727096558
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 69,
+          "initial_observation": [
+            0.5047332048416138,
+            0.8436260223388672,
+            0.19185617566108704,
+            0.9202196598052979
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 70,
+          "initial_observation": [
+            0.34380877017974854,
+            0.13925029337406158,
+            0.2453635036945343,
+            0.11594878137111664
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 71,
+          "initial_observation": [
+            0.291914701461792,
+            0.5271745324134827,
+            0.2631288170814514,
+            0.7100255489349365
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 72,
+          "initial_observation": [
+            0.09784208238124847,
+            1.112755537033081,
+            0.40605106949806213,
+            0.9852755665779114
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 73,
+          "initial_observation": [
+            0.5228597521781921,
+            0.7065712809562683,
+            0.05256141349673271,
+            0.8551216721534729
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 74,
+          "initial_observation": [
+            0.5778785347938538,
+            0.43678703904151917,
+            0.12437760829925537,
+            0.48444676399230957
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 75,
+          "initial_observation": [
+            0.4439345598220825,
+            0.5395638942718506,
+            0.35352420806884766,
+            0.1780935674905777
+          ],
+          "contact_count": 8,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 76,
+          "initial_observation": [
+            0.42915084958076477,
+            0.3551067113876343,
+            0.1351366639137268,
+            1.030673623085022
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 77,
+          "initial_observation": [
+            0.3403652012348175,
+            0.5920336246490479,
+            0.5239701867103577,
+            0.13017185032367706
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 78,
+          "initial_observation": [
+            0.41269662976264954,
+            0.41062459349632263,
+            0.1267869621515274,
+            0.8125986456871033
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 3
+        },
+        {
+          "episode_id": 79,
+          "initial_observation": [
+            0.2296837568283081,
+            0.41284245252609253,
+            0.5485968589782715,
+            0.26147475838661194
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 80,
+          "initial_observation": [
+            0.3116838335990906,
+            0.05831225961446762,
+            0.12017561495304108,
+            1.054397702217102
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 81,
+          "initial_observation": [
+            0.46380847692489624,
+            0.6758745908737183,
+            0.15261581540107727,
+            0.6769317388534546
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 82,
+          "initial_observation": [
+            0.03714893013238907,
+            0.8568681478500366,
+            0.42400479316711426,
+            0.7792720198631287
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 83,
+          "initial_observation": [
+            0.36612939834594727,
+            0.115920290350914,
+            0.16576673090457916,
+            0.6962071061134338
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 84,
+          "initial_observation": [
+            0.24690429866313934,
+            1.1802746057510376,
+            0.5376531481742859,
+            0.20666323602199554
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 85,
+          "initial_observation": [
+            0.3543919622898102,
+            0.837421178817749,
+            0.10544779896736145,
+            0.39279085397720337
+          ],
+          "contact_count": 9,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 86,
+          "initial_observation": [
+            0.42354753613471985,
+            1.0749002695083618,
+            0.21811038255691528,
+            0.307425320148468
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 87,
+          "initial_observation": [
+            0.4816766679286957,
+            0.7084982991218567,
+            0.29214611649513245,
+            0.3273681104183197
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 88,
+          "initial_observation": [
+            0.07037234306335449,
+            0.05121687427163124,
+            0.34890681505203247,
+            0.25198444724082947
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 89,
+          "initial_observation": [
+            0.5660866498947144,
+            0.15505041182041168,
+            0.27869483828544617,
+            0.48790648579597473
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 90,
+          "initial_observation": [
+            0.15802828967571259,
+            0.898317813873291,
+            0.38389965891838074,
+            0.8716621994972229
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 91,
+          "initial_observation": [
+            0.07594522088766098,
+            0.4393237233161926,
+            0.3158891499042511,
+            0.5250668525695801
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 92,
+          "initial_observation": [
+            0.05278066545724869,
+            0.2553655803203583,
+            0.549336314201355,
+            0.21890480816364288
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 93,
+          "initial_observation": [
+            0.4982908070087433,
+            0.9833698272705078,
+            0.24531592428684235,
+            0.5715007781982422
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 94,
+          "initial_observation": [
+            0.48288995027542114,
+            0.8194226622581482,
+            0.4899955987930298,
+            0.9085647463798523
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 95,
+          "initial_observation": [
+            0.41001570224761963,
+            1.088653564453125,
+            0.48223403096199036,
+            0.23802082240581512
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 96,
+          "initial_observation": [
+            0.44128504395484924,
+            0.13094712793827057,
+            0.2642921209335327,
+            0.4903313219547272
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 2
+        },
+        {
+          "episode_id": 97,
+          "initial_observation": [
+            0.14147837460041046,
+            1.1175495386123657,
+            0.08251618593931198,
+            0.036158617585897446
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 0
+        },
+        {
+          "episode_id": 98,
+          "initial_observation": [
+            0.20777644217014313,
+            1.1787927150726318,
+            0.17580820620059967,
+            0.9932878613471985
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        },
+        {
+          "episode_id": 99,
+          "initial_observation": [
+            0.1255263090133667,
+            0.7101159691810608,
+            0.5566850900650024,
+            0.8609474897384644
+          ],
+          "contact_count": 10,
+          "sparse_success_count": 1
+        }
+      ]
+    }
+  ]
+}

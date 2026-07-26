@@ -4,6 +4,7 @@ Overview:
 """
 
 from __future__ import annotations
+from dataclasses import dataclass
 from typing import Dict, Protocol, Tuple
 import pooltool as pt
 from zoo.pooltool.datatypes import State, Bounds
@@ -96,36 +97,68 @@ def image_observation_array(renderer: PygameRenderer) -> NDArray[np.float32]:
     return renderer.observation()
 
 
-def binary(state: State) -> float:
-    """
-    Overview:
-        Calculate the reward from the state.
-    Returns:
-        - reward (:obj:`float`): A reward of 0 or 1. A reward of 1 is returned if the \
-            player both **(1)** contacts the object ball with the cue ball and **(2)** \
-            the sum of contacted rails by either balls is 3.
-    """
-    # Count the number of ball-ball collisions
-    ball_hits = pt.events.filter_type(state.system.events, pt.EventType.BALL_BALL)
+@dataclass(frozen=True)
+class ShotOutcome:
+    """Event summary used by rewards, diagnostics, and evaluation."""
 
-    # Count rails that cue ball hits
+    contacted_object: bool
+    linear_cushion_count: int
+
+    @property
+    def sparse_success(self) -> bool:
+        return self.contacted_object and self.linear_cushion_count == 3
+
+
+def get_shot_outcome(state: State) -> ShotOutcome:
+    """Extract the SumToThree scoring events from a simulated shot."""
+    ball_hits = pt.events.filter_type(state.system.events, pt.EventType.BALL_BALL)
     cue_cushion_hits = pt.events.filter_events(
         state.system.events,
         pt.events.by_type(pt.EventType.BALL_LINEAR_CUSHION),
         pt.events.by_ball("cue"),
     )
-
-    # Count rails that object ball hits
     object_cushion_hits = pt.events.filter_events(
         state.system.events,
         pt.events.by_type(pt.EventType.BALL_LINEAR_CUSHION),
         pt.events.by_ball("object"),
     )
+    return ShotOutcome(
+        contacted_object=bool(ball_hits),
+        linear_cushion_count=len(cue_cushion_hits) + len(object_cushion_hits),
+    )
 
-    if len(ball_hits) and (len(cue_cushion_hits) + len(object_cushion_hits) == 3):
+
+def binary_from_outcome(outcome: ShotOutcome) -> float:
+    """Return the original sparse SumToThree reward."""
+    return float(outcome.sparse_success)
+
+
+def event_aligned_from_outcome(outcome: ShotOutcome) -> float:
+    """Return bounded progress feedback while keeping exact-three as the unique maximum."""
+    if not outcome.contacted_object:
+        return 0.0
+    if outcome.linear_cushion_count == 0:
+        return 0.1
+    if outcome.linear_cushion_count == 1:
+        return 0.2
+    if outcome.linear_cushion_count == 2:
+        return 0.3
+    if outcome.linear_cushion_count == 3:
         return 1.0
+    return 0.1
 
-    return 0.0
+
+def binary(state: State) -> float:
+    """
+    Overview:
+        Calculate the original binary reward from the simulated shot.
+    """
+    return binary_from_outcome(get_shot_outcome(state))
+
+
+def event_aligned(state: State) -> float:
+    """Calculate the event-aligned training reward from the simulated shot."""
+    return event_aligned_from_outcome(get_shot_outcome(state))
 
 
 class RewardFunction(Protocol):
@@ -137,8 +170,14 @@ class RewardFunction(Protocol):
     def __call__(self, state: State) -> float: ...
 
 
+_outcome_reward_functions = {
+    "binary": binary_from_outcome,
+    "event_aligned": event_aligned_from_outcome,
+}
+
 _reward_functions: Dict[str, Tuple[RewardFunction, Bounds]] = {
     "binary": (binary, Bounds(low=0.0, high=1.0)),
+    "event_aligned": (event_aligned, Bounds(low=0.0, high=1.0)),
 }
 
 
@@ -160,6 +199,12 @@ def get_reward_function(algorithm: str) -> RewardFunction:
     """
     _assert_exists(algorithm)
     return _reward_functions[algorithm][0]
+
+
+def reward_from_outcome(algorithm: str, outcome: ShotOutcome) -> float:
+    """Calculate a registered reward from an already extracted shot outcome."""
+    _assert_exists(algorithm)
+    return _outcome_reward_functions[algorithm](outcome)
 
 
 def get_reward_bounds(algorithm: str) -> Bounds:

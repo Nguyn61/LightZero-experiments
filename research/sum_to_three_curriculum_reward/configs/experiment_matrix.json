@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "study_id": "sum_to_three_curriculum_reward_v1",
+  "thesis": "Event-aligned reward densification plus progressive start-state curriculum improves binary sample efficiency and held-out start-state generalization.",
+  "primary_budget_env_steps": 40000,
+  "pilot_budget_env_steps": 15000,
+  "primary_seeds": [0, 1, 2],
+  "confirmation_extra_seeds": [3, 4],
+  "frozen_policy": {
+    "algorithm": "sampled_efficientzero",
+    "observation_type": "coordinate",
+    "action_dimensions": 2,
+    "num_of_sampled_actions": 20,
+    "num_simulations": 50,
+    "replay_ratio": 1.0,
+    "reanalyze_ratio": 0.25,
+    "ssl_loss_weight": 2.0,
+    "learning_rate": 0.003
+  },
+  "arms": {
+    "A_sparse_fixed": {
+      "training_reward": "binary",
+      "training_start_mode": "canonical"
+    },
+    "B_dense_fixed": {
+      "training_reward": "event_aligned",
+      "training_start_mode": "canonical"
+    },
+    "C_sparse_curriculum": {
+      "training_reward": "binary",
+      "training_start_mode": "curriculum"
+    },
+    "D_dense_curriculum": {
+      "training_reward": "event_aligned",
+      "training_start_mode": "curriculum"
+    },
+    "E_dense_broad": {
+      "training_reward": "event_aligned",
+      "training_start_mode": "broad",
+      "optional": true
+    }
+  },
+  "curriculum": {
+    "canonical_fraction": 0.25,
+    "local_fraction": 0.4,
+    "broad_fraction": 0.35
+  },
+  "evaluation": {
+    "reward": "binary",
+    "checkpoint_validation_distribution": "canonical",
+    "test_distributions": ["canonical", "local", "broad"],
+    "primary_metric": "binary_episode_score_mean",
+    "secondary_metrics": [
+      "binary_per_shot_success_rate",
+      "binary_learning_curve_auc",
+      "contact_rate",
+      "cushion_histogram_given_contact"
+    ]
+  }
+}

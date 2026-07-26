@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "run_id": "YYYYMMDD-A_sparse_fixed-main-seed000",
+  "status": "planned",
+  "created_at": null,
+  "completion": {
+    "finished_at": null,
+    "termination_reason": null,
+    "completed_budget": null,
+    "budget_unit": "env_step"
+  },
+  "repository": {
+    "commit": null,
+    "branch": null,
+    "dirty_worktree": null
+  },
+  "experiment": {
+    "family": "A_sparse_fixed",
+    "question": "Does the selected intervention improve the original binary objective?",
+    "hypothesis": null,
+    "primary_metric": "binary_episode_score_mean",
+    "success_criterion": null
+  },
+  "implementation": {
+    "reward": {
+      "status": "implemented_not_runtime_verified",
+      "algorithm": "binary",
+      "implementation_reference": "zoo/pooltool/sum_to_three/envs/utils.py",
+      "config_reference": "zoo/pooltool/sum_to_three/config/research_alpha.py"
+    },
+    "curriculum": {
+      "status": "implemented_not_runtime_verified",
+      "start_distribution": "canonical",
+      "implementation_reference": "zoo/pooltool/sum_to_three/envs/sum_to_three_env.py",
+      "config_reference": "zoo/pooltool/sum_to_three/config/research_alpha.py"
+    }
+  },
+  "baseline": {
+    "source_config_path": "zoo/pooltool/sum_to_three/config/exp1.py",
+    "source_config_sha256": null,
+    "semantics_reference": "binary reward + canonical start"
+  },
+  "command": {
+    "argv": [],
+    "working_directory": "../../",
+    "environment_overrides": {}
+  },
+  "reproducibility": {
+    "seeds": [0],
+    "max_env_step": 40000,
+    "evaluation_protocol": {
+      "reward": "binary",
+      "validation_distribution": "canonical",
+      "test_distributions": ["canonical", "local", "broad"],
+      "episodes_per_distribution": 100
+    },
+    "hardware": {
+      "device": null,
+      "cpu": null,
+      "gpu": null
+    },
+    "software": {
+      "python": null,
+      "pytorch": null,
+      "cuda": null,
+      "pooltool": null,
+      "lightzero_commit": null
+    }
+  },
+  "outputs": {
+    "run_directory": null,
+    "stdout_stderr": null,
+    "metrics": null,
+    "checkpoints": [],
+    "artifacts": []
+  },
+  "integrity": {
+    "plan_deviations": [],
+    "exclusion_reason": null,
+    "failures_or_retries": [],
+    "notes": null
+  }
+}

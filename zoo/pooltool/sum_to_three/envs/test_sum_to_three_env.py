@@ -1,25 +1,29 @@
 import math
-
-import numpy as np
-import pooltool as pt
 import pytest
-from easydict import EasyDict
-
+import numpy as np
 from zoo.pooltool.datatypes import Spaces
 from zoo.pooltool.image_representation import PygameRenderer, RenderConfig
 from zoo.pooltool.sum_to_three.envs.sum_to_three_env import (
     Bounds,
     SumToThreeEnv,
+    StartDistribution,
     SumToThreeSimulator,
     create_initial_state,
     get_action_space,
+    sample_initial_positions,
 )
+
+import pooltool as pt
 from zoo.pooltool.sum_to_three.envs.utils import (
     ObservationType,
+    ShotOutcome,
+    binary_from_outcome,
+    event_aligned_from_outcome,
     get_coordinate_obs_space,
     get_image_obs_space,
     get_reward_space,
 )
+from easydict import EasyDict
 
 np.random.seed(42)
 
@@ -321,3 +325,150 @@ def test_reset(env: SumToThreeEnv):
     assert env._env.state.system is system
     assert env._env.state.system != system_copy
     assert env._env.state.system == system_initial
+
+
+def test_reward_from_outcome_lookup():
+    cases = [
+        (ShotOutcome(False, 0), 0.0, 0.0),
+        (ShotOutcome(True, 0), 0.0, 0.1),
+        (ShotOutcome(True, 1), 0.0, 0.2),
+        (ShotOutcome(True, 2), 0.0, 0.3),
+        (ShotOutcome(True, 3), 1.0, 1.0),
+        (ShotOutcome(True, 4), 0.0, 0.1),
+    ]
+    for outcome, expected_binary, expected_event_aligned in cases:
+        assert binary_from_outcome(outcome) == expected_binary
+        assert event_aligned_from_outcome(outcome) == expected_event_aligned
+
+
+def test_event_aligned_reward_space():
+    reward_space = get_reward_space("event_aligned")
+    assert np.all(reward_space.low == 0.0)
+    assert np.all(reward_space.high == 1.0)
+
+
+@pytest.mark.parametrize("distribution", [StartDistribution.LOCAL, StartDistribution.BROAD])
+def test_sample_initial_positions_are_valid(distribution):
+    state = create_initial_state(random_pos=False)
+    system = state.system
+    R = system.balls["cue"].params.R
+    margin = 0.005
+    rng = np.random.default_rng(123)
+
+    for _ in range(100):
+        cue_pos, object_pos = sample_initial_positions(
+            system,
+            distribution,
+            rng,
+            separation_margin=margin,
+        )
+        assert R <= cue_pos[0] <= system.table.w - R
+        assert R <= cue_pos[1] <= system.table.l - R
+        assert R <= object_pos[0] <= system.table.w - R
+        assert R <= object_pos[1] <= system.table.l - R
+        assert np.linalg.norm(cue_pos[:2] - object_pos[:2]) >= 2 * R + margin
+
+
+def test_legacy_random_initial_state_honors_numpy_seed():
+    np.random.seed(7)
+    state_a = create_initial_state(random_pos=True)
+    positions_a = [ball.xyz.copy() for ball in state_a.system.balls.values()]
+
+    np.random.seed(7)
+    state_b = create_initial_state(random_pos=True)
+    positions_b = [ball.xyz.copy() for ball in state_b.system.balls.values()]
+
+    assert all(np.allclose(a, b) for a, b in zip(positions_a, positions_b))
+
+
+def test_start_sampling_is_seeded():
+    state = create_initial_state(random_pos=False)
+    rng_a = np.random.default_rng(7)
+    rng_b = np.random.default_rng(7)
+    rng_c = np.random.default_rng(8)
+
+    positions_a = sample_initial_positions(state.system, StartDistribution.BROAD, rng_a)
+    positions_b = sample_initial_positions(state.system, StartDistribution.BROAD, rng_b)
+    positions_c = sample_initial_positions(state.system, StartDistribution.BROAD, rng_c)
+
+    assert all(np.allclose(a, b) for a, b in zip(positions_a, positions_b))
+    assert any(not np.allclose(a, c) for a, c in zip(positions_a, positions_c))
+
+
+def test_curriculum_stage_progression(env_config):
+    env_config.update(
+        start_distribution="curriculum",
+        curriculum_enabled=True,
+        curriculum_total_episodes=4,
+        curriculum_canonical_fraction=0.25,
+        curriculum_local_fraction=0.50,
+    )
+    curriculum_env = SumToThreeEnv(env_config)
+    curriculum_env.seed(5, dynamic_seed=False)
+
+    observed = []
+    for _ in range(4):
+        curriculum_env.reset()
+        observed.append(curriculum_env._current_start_distribution)
+
+    assert observed == [
+        StartDistribution.CANONICAL,
+        StartDistribution.LOCAL,
+        StartDistribution.LOCAL,
+        StartDistribution.BROAD,
+    ]
+
+
+def test_collector_config_preserves_explicit_curriculum_episode_count():
+    cfg = dict(
+        collector_env_num=8,
+        episode_length=10,
+        curriculum_enabled=True,
+        start_distribution="curriculum",
+        curriculum_total_env_steps=40000,
+        curriculum_total_episodes=4,
+    )
+    collector_cfgs = SumToThreeEnv.create_collector_env_cfg(cfg)
+    assert all(item["curriculum_total_episodes"] == 4 for item in collector_cfgs)
+
+
+def test_evaluator_config_forces_binary_canonical():
+    cfg = dict(
+        evaluator_env_num=2,
+        reward_algorithm="event_aligned",
+        start_distribution="curriculum",
+        curriculum_enabled=True,
+    )
+    evaluator_cfgs = SumToThreeEnv.create_evaluator_env_cfg(cfg)
+    assert len(evaluator_cfgs) == 2
+    for evaluator_cfg in evaluator_cfgs:
+        assert evaluator_cfg["reward_algorithm"] == "binary"
+        assert evaluator_cfg["start_distribution"] == "canonical"
+        assert evaluator_cfg["curriculum_enabled"] is False
+        assert evaluator_cfg["env_role"] == "evaluator"
+
+    external_cfg = dict(
+        evaluator_env_num=1,
+        reward_algorithm="event_aligned",
+        start_distribution="broad",
+        external_evaluation=True,
+    )
+    external_evaluator = SumToThreeEnv.create_evaluator_env_cfg(external_cfg)[0]
+    assert external_evaluator["reward_algorithm"] == "binary"
+    assert external_evaluator["start_distribution"] == "broad"
+
+
+def test_episode_info_contains_binary_diagnostics(env):
+    env.seed(11, dynamic_seed=False)
+    env.reset()
+    timestep = env.step(_random_normalized_action())
+    assert timestep.info == {}
+    for _ in range(env.cfg.episode_length - 1):
+        timestep = env.step(_random_normalized_action())
+
+    assert timestep.done
+    assert timestep.info["eval_episode_length"] == env.cfg.episode_length
+    assert timestep.info["binary_episode_return"] == timestep.info["sparse_success_count"]
+    assert timestep.info["reward_algorithm"] == "binary"
+    assert timestep.info["start_distribution"] == "canonical"
+    assert sum(timestep.info["cushion_count_histogram"].values()) == env.cfg.episode_length

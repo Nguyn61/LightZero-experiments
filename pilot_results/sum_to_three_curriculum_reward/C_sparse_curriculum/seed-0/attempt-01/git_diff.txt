@@ -1,0 +1,726 @@
+diff --git a/zoo/pooltool/sum_to_three/config/sum_to_three_image_obs_sez_config.py b/zoo/pooltool/sum_to_three/config/sum_to_three_image_obs_sez_config.py
+index e2951c85..56a25d8d 100644
+--- a/zoo/pooltool/sum_to_three/config/sum_to_three_image_obs_sez_config.py
++++ b/zoo/pooltool/sum_to_three/config/sum_to_three_image_obs_sez_config.py
+@@ -65,14 +65,14 @@ sumtothree_cont_sampled_efficientzero_config = dict(
+         replay_ratio=replay_ratio,
+         batch_size=batch_size,
+         optim_type="Adam",
+-        piecewise_decay_lr_scheduler=False,
++        lr_piecewise_constant_decay=False,
+         ssl_loss_weight=ssl_loss_weight,
+         discount_factor=1,
+         td_steps=10,
+         num_unroll_steps=3,
+         learning_rate=0.003,
+         grad_clip_value=5,
+-        policy_entropy_weight=5e-3,
++        policy_entropy_loss_weight=5e-3,
+         num_simulations=num_simulations,
+         reanalyze_ratio=reanalyze_ratio,
+         n_episode=n_episode,
+diff --git a/zoo/pooltool/sum_to_three/config/sum_to_three_vector_obs_sez_config.py b/zoo/pooltool/sum_to_three/config/sum_to_three_vector_obs_sez_config.py
+index 71b234d1..703572c4 100644
+--- a/zoo/pooltool/sum_to_three/config/sum_to_three_vector_obs_sez_config.py
++++ b/zoo/pooltool/sum_to_three/config/sum_to_three_vector_obs_sez_config.py
+@@ -12,7 +12,7 @@ num_simulations = 50
+ update_per_collect = None
+ replay_ratio = 1
+ batch_size = 256
+-max_env_step = int(1e6)
++max_env_step = int(1e5)
+ reanalyze_ratio = 0.25
+ ssl_loss_weight = 2
+ eval_freq = 2e3
+@@ -56,14 +56,14 @@ sumtothree_cont_sampled_efficientzero_config = dict(
+         replay_ratio=replay_ratio,
+         batch_size=batch_size,
+         optim_type="Adam",
+-        piecewise_decay_lr_scheduler=False,
++        lr_piecewise_constant_decay=False,
+         ssl_loss_weight=ssl_loss_weight,
+         discount_factor=1,
+         td_steps=10,
+         num_unroll_steps=3,
+         learning_rate=0.003,
+         grad_clip_value=5,
+-        policy_entropy_weight=5e-3,
++        policy_entropy_loss_weight=5e-3,
+         num_simulations=num_simulations,
+         reanalyze_ratio=reanalyze_ratio,
+         n_episode=n_episode,
+diff --git a/zoo/pooltool/sum_to_three/envs/sum_to_three_env.py b/zoo/pooltool/sum_to_three/envs/sum_to_three_env.py
+index 8a9e643b..290d1ce9 100644
+--- a/zoo/pooltool/sum_to_three/envs/sum_to_three_env.py
++++ b/zoo/pooltool/sum_to_three/envs/sum_to_three_env.py
+@@ -39,18 +39,18 @@ Reward Space:
+ 
+ from __future__ import annotations
+ 
++import copy
+ import gc
+-from dataclasses import dataclass, asdict
+-from typing import Optional
++import math
+ 
++from dataclasses import dataclass, asdict, field
++from enum import Enum
++from typing import Dict, Optional, Tuple
+ import numpy as np
+-import pooltool as pt
+ from ding.envs import BaseEnvTimestep
+ from ding.utils import ENV_REGISTRY
+ from easydict import EasyDict
+-from gym import spaces
+ from numpy.typing import NDArray
+-
+ from zoo.pooltool.datatypes import (
+     Bounds,
+     ObservationDict,
+@@ -59,6 +59,9 @@ from zoo.pooltool.datatypes import (
+     Spaces,
+     State,
+ )
++from gym import spaces
++
++import pooltool as pt
+ from zoo.pooltool.image_representation import PygameRenderer, RenderConfig
+ from zoo.pooltool.sum_to_three.envs.utils import (
+     ObservationType,
+@@ -66,8 +69,9 @@ from zoo.pooltool.sum_to_three.envs.utils import (
+     image_observation_array,
+     get_image_obs_space,
+     get_coordinate_obs_space,
+-    get_reward_function,
+     get_reward_space,
++    get_shot_outcome,
++    reward_from_outcome,
+ )
+ 
+ 
+@@ -84,32 +88,103 @@ def get_action_space(V0: Bounds, angle: Bounds) -> spaces.Box:
+     )
+ 
+ 
+-def _set_initial_positions(system: pt.System, random_pos: bool) -> None:
++class StartDistribution(Enum):
++    CANONICAL = "canonical"
++    LOCAL = "local"
++    BROAD = "broad"
++    CURRICULUM = "curriculum"
++
++
++def _canonical_positions(system: pt.System) -> Tuple[np.ndarray, np.ndarray]:
+     R = system.balls["cue"].params.R
++    cue_pos = np.array([system.table.w / 2, system.table.l / 4, R], dtype=np.float64)
++    object_pos = np.array([system.table.w / 2, system.table.l * 3 / 4, R], dtype=np.float64)
++    return cue_pos, object_pos
++
++
++def _valid_positions(
++    cue_pos: np.ndarray,
++    object_pos: np.ndarray,
++    system: pt.System,
++    separation_margin: float,
++) -> bool:
++    R = system.balls["cue"].params.R
++    within_table = (
++        R <= cue_pos[0] <= system.table.w - R
++        and R <= cue_pos[1] <= system.table.l - R
++        and R <= object_pos[0] <= system.table.w - R
++        and R <= object_pos[1] <= system.table.l - R
++    )
++    separation = np.linalg.norm(cue_pos[:2] - object_pos[:2])
++    return within_table and separation >= 2 * R + separation_margin
++
++
++def sample_initial_positions(
++    system: pt.System,
++    distribution: StartDistribution,
++    rng: np.random.Generator,
++    local_perturbation_fraction: float = 0.08,
++    separation_margin: float = 0.005,
++    max_attempts: int = 100,
++) -> Tuple[np.ndarray, np.ndarray]:
++    """Sample valid ball positions for one of the research start distributions."""
++    canonical_cue, canonical_object = _canonical_positions(system)
++    if distribution == StartDistribution.CANONICAL:
++        return canonical_cue, canonical_object
++    if distribution == StartDistribution.CURRICULUM:
++        raise ValueError("CURRICULUM must be resolved to canonical, local, or broad before sampling")
++
++    R = system.balls["cue"].params.R
++    usable_width = system.table.w - 2 * R
++    usable_length = system.table.l - 2 * R
++
++    for _ in range(max_attempts):
++        if distribution == StartDistribution.LOCAL:
++            scale = np.array(
++                [local_perturbation_fraction * usable_width, local_perturbation_fraction * usable_length]
++            )
++            cue_xy = canonical_cue[:2] + rng.uniform(-scale, scale)
++            object_xy = canonical_object[:2] + rng.uniform(-scale, scale)
++        elif distribution == StartDistribution.BROAD:
++            cue_xy = rng.uniform([R, R], [system.table.w - R, system.table.l - R])
++            object_xy = rng.uniform([R, R], [system.table.w - R, system.table.l - R])
++        else:
++            raise ValueError(f"Unhandled start distribution: {distribution}")
++
++        cue_pos = np.array([cue_xy[0], cue_xy[1], R], dtype=np.float64)
++        object_pos = np.array([object_xy[0], object_xy[1], R], dtype=np.float64)
++        if _valid_positions(cue_pos, object_pos, system, separation_margin):
++            return cue_pos, object_pos
++
++    raise RuntimeError(
++        f"Could not sample valid {distribution.value} positions after {max_attempts} attempts"
++    )
+ 
+-    if random_pos:
+-        cue_pos = (
+-            (system.table.w - 2 * R) * np.random.rand() + R,
+-            (system.table.l - 2 * R) * np.random.rand() + R,
+-            R,
+-        )
+-        object_pos = (
+-            (system.table.w - 2 * R) * np.random.rand() + R,
+-            (system.table.l - 2 * R) * np.random.rand() + R,
+-            R,
+-        )
+-    else:
+-        cue_pos = (
+-            system.table.w / 2,
+-            system.table.l / 4,
+-            R,
+-        )
+-        object_pos = (
+-            system.table.w / 2,
+-            system.table.l * 3 / 4,
+-            R,
+-        )
+ 
++def _set_initial_positions(
++    system: pt.System,
++    random_pos: bool = False,
++    *,
++    distribution: Optional[StartDistribution] = None,
++    rng: Optional[np.random.Generator] = None,
++    local_perturbation_fraction: float = 0.08,
++    separation_margin: float = 0.005,
++    max_attempts: int = 100,
++) -> None:
++    if distribution is None:
++        distribution = StartDistribution.BROAD if random_pos else StartDistribution.CANONICAL
++    if rng is None:
++        legacy_seed = int(np.random.randint(0, np.iinfo(np.uint32).max))
++        rng = np.random.default_rng(legacy_seed)
++
++    cue_pos, object_pos = sample_initial_positions(
++        system,
++        distribution,
++        rng,
++        local_perturbation_fraction=local_perturbation_fraction,
++        separation_margin=separation_margin,
++        max_attempts=max_attempts,
++    )
+     system.balls["cue"].state.rvw[0] = cue_pos
+     system.balls["object"].state.rvw[0] = object_pos
+ 
+@@ -234,6 +309,12 @@ class SumToThreeSimulator(PoolToolSimulator):
+ class EpisodicTrackedStats:
+     eval_episode_length: int = 0
+     eval_episode_return: float = 0.0
++    binary_episode_return: float = 0.0
++    sparse_success_count: int = 0
++    contact_count: int = 0
++    cushion_count_histogram: Dict[str, int] = field(default_factory=dict)
++    start_distribution: str = StartDistribution.CANONICAL.value
++    reward_algorithm: str = "binary"
+ 
+ 
+ @ENV_REGISTRY.register("pooltool_sumtothree")
+@@ -248,17 +329,61 @@ class SumToThreeEnv(PoolToolEnv):
+         action_angle_low=-70,
+         action_angle_high=70,
+         raw_observation=False,
++        start_distribution="canonical",
++        curriculum_enabled=False,
++        curriculum_total_env_steps=40000,
++        curriculum_total_episodes=None,
++        curriculum_canonical_fraction=0.25,
++        curriculum_local_fraction=0.40,
++        local_perturbation_fraction=0.08,
++        start_separation_margin=0.005,
++        start_sampling_max_attempts=100,
++        emit_step_diagnostics=False,
++        env_role="default",
+     )
+ 
+     def __repr__(self) -> str:
+         return "SumToThreeEnv"
+ 
++    @staticmethod
++    def create_collector_env_cfg(cfg: dict) -> list:
++        cfg = copy.deepcopy(cfg)
++        collector_env_num = cfg.pop("collector_env_num")
++        cfg["env_role"] = "collector"
++        if (
++            cfg.get("curriculum_total_episodes") is None
++            and (
++                cfg.get("curriculum_enabled")
++                or cfg.get("start_distribution") == StartDistribution.CURRICULUM.value
++            )
++        ):
++            total_env_steps = int(cfg.get("curriculum_total_env_steps", 40000))
++            episode_length = int(cfg.get("episode_length", SumToThreeEnv.config["episode_length"]))
++            cfg["curriculum_total_episodes"] = max(
++                1, math.ceil(total_env_steps / (collector_env_num * episode_length))
++            )
++        return [copy.deepcopy(cfg) for _ in range(collector_env_num)]
++
++    @staticmethod
++    def create_evaluator_env_cfg(cfg: dict) -> list:
++        cfg = copy.deepcopy(cfg)
++        evaluator_env_num = cfg.pop("evaluator_env_num")
++        start_distribution = (
++            cfg.get("start_distribution", StartDistribution.CANONICAL.value)
++            if cfg.get("external_evaluation", False)
++            else StartDistribution.CANONICAL.value
++        )
++        cfg.update(
++            env_role="evaluator",
++            reward_algorithm="binary",
++            start_distribution=start_distribution,
++            curriculum_enabled=False,
++        )
++        return [copy.deepcopy(cfg) for _ in range(evaluator_env_num)]
++
+     def __init__(self, cfg: EasyDict) -> None:
+         self.cfg = cfg
+-        self.raw_observation = cfg.raw_observation
+-
+-        # Get the reward function
+-        self.calc_reward = get_reward_function(self.cfg.reward_algorithm)
++        self.raw_observation = cfg.get("raw_observation", False)
+ 
+         # Structure the action bounds
+         self.action_bounds = {
+@@ -292,9 +417,52 @@ class SumToThreeEnv(PoolToolEnv):
+                 self.render_config = RenderConfig.default()
+ 
+         self._init_flag = False
++        self._rng = np.random.default_rng()
++        self._reset_count = 0
++        self._current_start_distribution = StartDistribution.CANONICAL
+         self._tracked_stats = EpisodicTrackedStats()
+         self._env: SumToThreeSimulator
+ 
++    def seed(self, seed: int, dynamic_seed: bool = True) -> None:
++        super().seed(seed, dynamic_seed)
++        self._rng = np.random.default_rng(seed)
++
++    def _resolve_start_distribution(self) -> StartDistribution:
++        configured = StartDistribution(self.cfg.get("start_distribution", "canonical"))
++        if not self.cfg.get("curriculum_enabled", False) and configured != StartDistribution.CURRICULUM:
++            return configured
++
++        total_episodes = self.cfg.get("curriculum_total_episodes")
++        if total_episodes is None:
++            total_episodes = max(
++                1,
++                math.ceil(
++                    int(self.cfg.get("curriculum_total_env_steps", 40000))
++                    / int(self.cfg.get("episode_length", self.config["episode_length"]))
++                ),
++            )
++        progress = min(self._reset_count / max(int(total_episodes), 1), 1.0)
++        canonical_fraction = float(self.cfg.get("curriculum_canonical_fraction", 0.25))
++        local_fraction = float(self.cfg.get("curriculum_local_fraction", 0.40))
++        if progress < canonical_fraction:
++            return StartDistribution.CANONICAL
++        if progress < canonical_fraction + local_fraction:
++            return StartDistribution.LOCAL
++        return StartDistribution.BROAD
++
++    def _apply_start_distribution(self) -> None:
++        self._current_start_distribution = self._resolve_start_distribution()
++        _set_initial_positions(
++            self._env.state.system,
++            distribution=self._current_start_distribution,
++            rng=self._rng,
++            local_perturbation_fraction=float(self.cfg.get("local_perturbation_fraction", 0.08)),
++            separation_margin=float(self.cfg.get("start_separation_margin", 0.005)),
++            max_attempts=int(self.cfg.get("start_sampling_max_attempts", 100)),
++        )
++        _set_initial_cue_state(self._env.state.system)
++        self._reset_count += 1
++
+     def close(self) -> None:
+         if self._env.renderer is not None:
+             self._env.renderer.close()
+@@ -362,7 +530,11 @@ class SumToThreeEnv(PoolToolEnv):
+             self._env.reset()
+ 
+         self.manage_seeds()
+-        self._tracked_stats = EpisodicTrackedStats()
++        self._apply_start_distribution()
++        self._tracked_stats = EpisodicTrackedStats(
++            start_distribution=self._current_start_distribution.value,
++            reward_algorithm=self.cfg.reward_algorithm,
++        )
+ 
+         self._observation_space = self._env.spaces.observation
+         self._action_space = self._env.spaces.action
+@@ -377,13 +549,36 @@ class SumToThreeEnv(PoolToolEnv):
+         self._env.set_action(self._env.scale_action(action))
+         self._env.simulate()
+ 
+-        rew = self.calc_reward(self._env.state)
++        outcome = get_shot_outcome(self._env.state)
++        rew = reward_from_outcome(self.cfg.reward_algorithm, outcome)
++        binary_rew = float(outcome.sparse_success)
+ 
+         self._tracked_stats.eval_episode_length += 1
+         self._tracked_stats.eval_episode_return += rew
++        self._tracked_stats.binary_episode_return += binary_rew
++        self._tracked_stats.sparse_success_count += int(outcome.sparse_success)
++        self._tracked_stats.contact_count += int(outcome.contacted_object)
++        cushion_key = str(outcome.linear_cushion_count)
++        self._tracked_stats.cushion_count_histogram[cushion_key] = (
++            self._tracked_stats.cushion_count_histogram.get(cushion_key, 0) + 1
++        )
+ 
+         done = self._tracked_stats.eval_episode_length == self.cfg.episode_length
+-        info = asdict(self._tracked_stats) if done else {}
++        info = {}
++        if self.cfg.get("emit_step_diagnostics", False) or done:
++            info.update(
++                shot_outcome=asdict(outcome),
++                binary_reward=binary_rew,
++                start_distribution=self._current_start_distribution.value,
++                reward_algorithm=self.cfg.reward_algorithm,
++            )
++        if done:
++            info.update(asdict(self._tracked_stats))
++            info["episode_info"] = {
++                "binary_episode_return": self._tracked_stats.binary_episode_return,
++                "sparse_success_count": self._tracked_stats.sparse_success_count,
++                "contact_count": self._tracked_stats.contact_count,
++            }
+ 
+         if self.raw_observation:
+             return BaseEnvTimestep(
+diff --git a/zoo/pooltool/sum_to_three/envs/test_sum_to_three_env.py b/zoo/pooltool/sum_to_three/envs/test_sum_to_three_env.py
+index 96fc722b..35427e83 100644
+--- a/zoo/pooltool/sum_to_three/envs/test_sum_to_three_env.py
++++ b/zoo/pooltool/sum_to_three/envs/test_sum_to_three_env.py
+@@ -1,25 +1,29 @@
+ import math
+-
+-import numpy as np
+-import pooltool as pt
+ import pytest
+-from easydict import EasyDict
+-
++import numpy as np
+ from zoo.pooltool.datatypes import Spaces
+ from zoo.pooltool.image_representation import PygameRenderer, RenderConfig
+ from zoo.pooltool.sum_to_three.envs.sum_to_three_env import (
+     Bounds,
+     SumToThreeEnv,
++    StartDistribution,
+     SumToThreeSimulator,
+     create_initial_state,
+     get_action_space,
++    sample_initial_positions,
+ )
++
++import pooltool as pt
+ from zoo.pooltool.sum_to_three.envs.utils import (
+     ObservationType,
++    ShotOutcome,
++    binary_from_outcome,
++    event_aligned_from_outcome,
+     get_coordinate_obs_space,
+     get_image_obs_space,
+     get_reward_space,
+ )
++from easydict import EasyDict
+ 
+ np.random.seed(42)
+ 
+@@ -321,3 +325,150 @@ def test_reset(env: SumToThreeEnv):
+     assert env._env.state.system is system
+     assert env._env.state.system != system_copy
+     assert env._env.state.system == system_initial
++
++
++def test_reward_from_outcome_lookup():
++    cases = [
++        (ShotOutcome(False, 0), 0.0, 0.0),
++        (ShotOutcome(True, 0), 0.0, 0.1),
++        (ShotOutcome(True, 1), 0.0, 0.2),
++        (ShotOutcome(True, 2), 0.0, 0.3),
++        (ShotOutcome(True, 3), 1.0, 1.0),
++        (ShotOutcome(True, 4), 0.0, 0.1),
++    ]
++    for outcome, expected_binary, expected_event_aligned in cases:
++        assert binary_from_outcome(outcome) == expected_binary
++        assert event_aligned_from_outcome(outcome) == expected_event_aligned
++
++
++def test_event_aligned_reward_space():
++    reward_space = get_reward_space("event_aligned")
++    assert np.all(reward_space.low == 0.0)
++    assert np.all(reward_space.high == 1.0)
++
++
++@pytest.mark.parametrize("distribution", [StartDistribution.LOCAL, StartDistribution.BROAD])
++def test_sample_initial_positions_are_valid(distribution):
++    state = create_initial_state(random_pos=False)
++    system = state.system
++    R = system.balls["cue"].params.R
++    margin = 0.005
++    rng = np.random.default_rng(123)
++
++    for _ in range(100):
++        cue_pos, object_pos = sample_initial_positions(
++            system,
++            distribution,
++            rng,
++            separation_margin=margin,
++        )
++        assert R <= cue_pos[0] <= system.table.w - R
++        assert R <= cue_pos[1] <= system.table.l - R
++        assert R <= object_pos[0] <= system.table.w - R
++        assert R <= object_pos[1] <= system.table.l - R
++        assert np.linalg.norm(cue_pos[:2] - object_pos[:2]) >= 2 * R + margin
++
++
++def test_legacy_random_initial_state_honors_numpy_seed():
++    np.random.seed(7)
++    state_a = create_initial_state(random_pos=True)
++    positions_a = [ball.xyz.copy() for ball in state_a.system.balls.values()]
++
++    np.random.seed(7)
++    state_b = create_initial_state(random_pos=True)
++    positions_b = [ball.xyz.copy() for ball in state_b.system.balls.values()]
++
++    assert all(np.allclose(a, b) for a, b in zip(positions_a, positions_b))
++
++
++def test_start_sampling_is_seeded():
++    state = create_initial_state(random_pos=False)
++    rng_a = np.random.default_rng(7)
++    rng_b = np.random.default_rng(7)
++    rng_c = np.random.default_rng(8)
++
++    positions_a = sample_initial_positions(state.system, StartDistribution.BROAD, rng_a)
++    positions_b = sample_initial_positions(state.system, StartDistribution.BROAD, rng_b)
++    positions_c = sample_initial_positions(state.system, StartDistribution.BROAD, rng_c)
++
++    assert all(np.allclose(a, b) for a, b in zip(positions_a, positions_b))
++    assert any(not np.allclose(a, c) for a, c in zip(positions_a, positions_c))
++
++
++def test_curriculum_stage_progression(env_config):
++    env_config.update(
++        start_distribution="curriculum",
++        curriculum_enabled=True,
++        curriculum_total_episodes=4,
++        curriculum_canonical_fraction=0.25,
++        curriculum_local_fraction=0.50,
++    )
++    curriculum_env = SumToThreeEnv(env_config)
++    curriculum_env.seed(5, dynamic_seed=False)
++
++    observed = []
++    for _ in range(4):
++        curriculum_env.reset()
++        observed.append(curriculum_env._current_start_distribution)
++
++    assert observed == [
++        StartDistribution.CANONICAL,
++        StartDistribution.LOCAL,
++        StartDistribution.LOCAL,
++        StartDistribution.BROAD,
++    ]
++
++
++def test_collector_config_preserves_explicit_curriculum_episode_count():
++    cfg = dict(
++        collector_env_num=8,
++        episode_length=10,
++        curriculum_enabled=True,
++        start_distribution="curriculum",
++        curriculum_total_env_steps=40000,
++        curriculum_total_episodes=4,
++    )
++    collector_cfgs = SumToThreeEnv.create_collector_env_cfg(cfg)
++    assert all(item["curriculum_total_episodes"] == 4 for item in collector_cfgs)
++
++
++def test_evaluator_config_forces_binary_canonical():
++    cfg = dict(
++        evaluator_env_num=2,
++        reward_algorithm="event_aligned",
++        start_distribution="curriculum",
++        curriculum_enabled=True,
++    )
++    evaluator_cfgs = SumToThreeEnv.create_evaluator_env_cfg(cfg)
++    assert len(evaluator_cfgs) == 2
++    for evaluator_cfg in evaluator_cfgs:
++        assert evaluator_cfg["reward_algorithm"] == "binary"
++        assert evaluator_cfg["start_distribution"] == "canonical"
++        assert evaluator_cfg["curriculum_enabled"] is False
++        assert evaluator_cfg["env_role"] == "evaluator"
++
++    external_cfg = dict(
++        evaluator_env_num=1,
++        reward_algorithm="event_aligned",
++        start_distribution="broad",
++        external_evaluation=True,
++    )
++    external_evaluator = SumToThreeEnv.create_evaluator_env_cfg(external_cfg)[0]
++    assert external_evaluator["reward_algorithm"] == "binary"
++    assert external_evaluator["start_distribution"] == "broad"
++
++
++def test_episode_info_contains_binary_diagnostics(env):
++    env.seed(11, dynamic_seed=False)
++    env.reset()
++    timestep = env.step(_random_normalized_action())
++    assert timestep.info == {}
++    for _ in range(env.cfg.episode_length - 1):
++        timestep = env.step(_random_normalized_action())
++
++    assert timestep.done
++    assert timestep.info["eval_episode_length"] == env.cfg.episode_length
++    assert timestep.info["binary_episode_return"] == timestep.info["sparse_success_count"]
++    assert timestep.info["reward_algorithm"] == "binary"
++    assert timestep.info["start_distribution"] == "canonical"
++    assert sum(timestep.info["cushion_count_histogram"].values()) == env.cfg.episode_length
+diff --git a/zoo/pooltool/sum_to_three/envs/utils.py b/zoo/pooltool/sum_to_three/envs/utils.py
+index 80ee6ca6..f48086f1 100644
+--- a/zoo/pooltool/sum_to_three/envs/utils.py
++++ b/zoo/pooltool/sum_to_three/envs/utils.py
+@@ -4,6 +4,7 @@ Overview:
+ """
+ 
+ from __future__ import annotations
++from dataclasses import dataclass
+ from typing import Dict, Protocol, Tuple
+ import pooltool as pt
+ from zoo.pooltool.datatypes import State, Bounds
+@@ -96,36 +97,68 @@ def image_observation_array(renderer: PygameRenderer) -> NDArray[np.float32]:
+     return renderer.observation()
+ 
+ 
+-def binary(state: State) -> float:
+-    """
+-    Overview:
+-        Calculate the reward from the state.
+-    Returns:
+-        - reward (:obj:`float`): A reward of 0 or 1. A reward of 1 is returned if the \
+-            player both **(1)** contacts the object ball with the cue ball and **(2)** \
+-            the sum of contacted rails by either balls is 3.
+-    """
+-    # Count the number of ball-ball collisions
+-    ball_hits = pt.events.filter_type(state.system.events, pt.EventType.BALL_BALL)
++@dataclass(frozen=True)
++class ShotOutcome:
++    """Event summary used by rewards, diagnostics, and evaluation."""
++
++    contacted_object: bool
++    linear_cushion_count: int
+ 
+-    # Count rails that cue ball hits
++    @property
++    def sparse_success(self) -> bool:
++        return self.contacted_object and self.linear_cushion_count == 3
++
++
++def get_shot_outcome(state: State) -> ShotOutcome:
++    """Extract the SumToThree scoring events from a simulated shot."""
++    ball_hits = pt.events.filter_type(state.system.events, pt.EventType.BALL_BALL)
+     cue_cushion_hits = pt.events.filter_events(
+         state.system.events,
+         pt.events.by_type(pt.EventType.BALL_LINEAR_CUSHION),
+         pt.events.by_ball("cue"),
+     )
+-
+-    # Count rails that object ball hits
+     object_cushion_hits = pt.events.filter_events(
+         state.system.events,
+         pt.events.by_type(pt.EventType.BALL_LINEAR_CUSHION),
+         pt.events.by_ball("object"),
+     )
++    return ShotOutcome(
++        contacted_object=bool(ball_hits),
++        linear_cushion_count=len(cue_cushion_hits) + len(object_cushion_hits),
++    )
++
++
++def binary_from_outcome(outcome: ShotOutcome) -> float:
++    """Return the original sparse SumToThree reward."""
++    return float(outcome.sparse_success)
+ 
+-    if len(ball_hits) and (len(cue_cushion_hits) + len(object_cushion_hits) == 3):
++
++def event_aligned_from_outcome(outcome: ShotOutcome) -> float:
++    """Return bounded progress feedback while keeping exact-three as the unique maximum."""
++    if not outcome.contacted_object:
++        return 0.0
++    if outcome.linear_cushion_count == 0:
++        return 0.1
++    if outcome.linear_cushion_count == 1:
++        return 0.2
++    if outcome.linear_cushion_count == 2:
++        return 0.3
++    if outcome.linear_cushion_count == 3:
+         return 1.0
++    return 0.1
++
++
++def binary(state: State) -> float:
++    """
++    Overview:
++        Calculate the original binary reward from the simulated shot.
++    """
++    return binary_from_outcome(get_shot_outcome(state))
+ 
+-    return 0.0
++
++def event_aligned(state: State) -> float:
++    """Calculate the event-aligned training reward from the simulated shot."""
++    return event_aligned_from_outcome(get_shot_outcome(state))
+ 
+ 
+ class RewardFunction(Protocol):
+@@ -137,8 +170,14 @@ class RewardFunction(Protocol):
+     def __call__(self, state: State) -> float: ...
+ 
+ 
++_outcome_reward_functions = {
++    "binary": binary_from_outcome,
++    "event_aligned": event_aligned_from_outcome,
++}
++
+ _reward_functions: Dict[str, Tuple[RewardFunction, Bounds]] = {
+     "binary": (binary, Bounds(low=0.0, high=1.0)),
++    "event_aligned": (event_aligned, Bounds(low=0.0, high=1.0)),
+ }
+ 
+ 
+@@ -162,6 +201,12 @@ def get_reward_function(algorithm: str) -> RewardFunction:
+     return _reward_functions[algorithm][0]
+ 
+ 
++def reward_from_outcome(algorithm: str, outcome: ShotOutcome) -> float:
++    """Calculate a registered reward from an already extracted shot outcome."""
++    _assert_exists(algorithm)
++    return _outcome_reward_functions[algorithm](outcome)
++
++
+ def get_reward_bounds(algorithm: str) -> Bounds:
+     """
+     Overview:

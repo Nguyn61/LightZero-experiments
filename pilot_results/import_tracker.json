@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "run_id": "20260722-A-seed000",
+      "status": "done",
+      "experiment.family": "A_sparse_fixed",
+      "experiment.primary_metric": "eval_episode_return_mean",
+      "reproducibility.seeds": "0",
+      "reproducibility.hardware.device": "Vast.ai 1x RTX 4090",
+      "outputs.metrics": "4.65"
+    },
+    {
+      "run_id": "20260722-B-seed000",
+      "status": "done",
+      "experiment.family": "B_dense_fixed",
+      "experiment.primary_metric": "eval_episode_return_mean",
+      "reproducibility.seeds": "0",
+      "reproducibility.hardware.device": "Vast.ai 1x RTX 4090",
+      "outputs.metrics": "4.10"
+    },
+    {
+      "run_id": "20260722-C-seed000",
+      "status": "done",
+      "experiment.family": "C_sparse_curriculum",
+      "experiment.primary_metric": "eval_episode_return_mean",
+      "reproducibility.seeds": "0",
+      "reproducibility.hardware.device": "Vast.ai 1x RTX 4090",
+      "outputs.metrics": "5.30"
+    },
+    {
+      "run_id": "20260722-D-seed000",
+      "status": "done",
+      "experiment.family": "D_dense_curriculum",
+      "experiment.primary_metric": "eval_episode_return_mean",
+      "reproducibility.seeds": "0",
+      "reproducibility.hardware.device": "Vast.ai 1x RTX 4090",
+      "outputs.metrics": "3.75"
+    },
+    {
+      "run_id": "20260722-E-seed000",
+      "status": "done",
+      "experiment.family": "E_dense_broad",
+      "experiment.primary_metric": "eval_episode_return_mean",
+      "reproducibility.seeds": "0",
+      "reproducibility.hardware.device": "Vast.ai 1x RTX 4090",
+      "outputs.metrics": "4.20"
+    }
+  ]
+}
